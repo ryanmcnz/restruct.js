@@ -8,6 +8,8 @@ _A JavaScript binary data library._
 intuitive declarative API to define formats for binary structure parsers and
 emitters. It works in both the browser and on Node.
 
+`restruct.js` is freely distributable under the terms of the MIT license.
+
 Example:
 
     > struct = (new Restruct).
