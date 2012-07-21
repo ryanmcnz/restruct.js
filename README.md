@@ -15,7 +15,7 @@ Example:
     ... int8u('version').
     ... string('username', 20);
 
-    > struct.pack({opcode: 1, version: 1, username: "test"});
+    > packet = struct.pack({opcode: 1, version: 1, username: "test"});
     [ 1, 1, 116, 101, 115, 116, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
 
     > struct.unpack(packet);
@@ -23,7 +23,7 @@ Example:
       version: 1,
       username: 'test' }
 
-`restruct.js` has support for typed arrays, where avaiable.
+`restruct.js` has support for typed arrays, where available.
 
 ## Usage
 

@@ -206,7 +206,7 @@ emitters. It works in both the browser and on Node.</p>
 ... int8u('version').
 ... string('username', 20);
 
-&gt; struct.pack({opcode: 1, version: 1, username: "test"});
+&gt; packet = struct.pack({opcode: 1, version: 1, username: "test"});
 [ 1, 1, 116, 101, 115, 116, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
 
 &gt; struct.unpack(packet);
@@ -215,7 +215,7 @@ emitters. It works in both the browser and on Node.</p>
   username: 'test' }
 </code></pre>
 
-<p><code>restruct.js</code> has support for typed arrays, where avaiable.</p>
+<p><code>restruct.js</code> has support for typed arrays, where available.</p>
 
 <h2 id="Usage">Usage</h2>
 
