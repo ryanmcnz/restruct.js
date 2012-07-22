@@ -173,6 +173,96 @@
             test.done();
         },
 
+        // float32
+        testFloat32lUnpack: function(test) {
+            test.expect(1);
+            if(typeof Float32Array === 'undefined') {
+                test.ok(true, 'browser does not support Float32Array');
+            } else {
+                var struct = (new Restruct).float32l('test');
+                test.deepEqual(struct.unpack([0, 240, 255, 0]), {test: 2.3504147297935876e-38});
+            }
+            test.done();
+        },
+
+        testFloat32lPack: function(test) {
+            test.expect(1);
+            if(typeof Float32Array === 'undefined') {
+                test.ok(true, 'browser does not support Float32Array');
+            } else {
+                var struct = (new Restruct).float32l('test');
+                test.deepEqual(struct.pack({test: 2.3504147297935876e-38}, []), [0, 240, 255, 0]);
+            }
+            test.done();
+        },
+
+        testFloat32bUnpack: function(test) {
+            test.expect(1);
+            if(typeof Float32Array === 'undefined') {
+                test.ok(true, 'browser does not support Float32Array');
+            } else {
+                var struct = (new Restruct).float32b('test');
+                test.deepEqual(struct.unpack([0, 255, 240, 0]), {test: 2.3504147297935876e-38});
+            }
+            test.done();
+        },
+
+        testFloat32bPack: function(test) {
+            test.expect(1);
+            if(typeof Float32Array === 'undefined') {
+                test.ok(true, 'browser does not support Float32Array');
+            } else {
+                var struct = (new Restruct).float32b('test');
+                test.deepEqual(struct.pack({test: 2.3504147297935876e-38}, []), [0, 255, 240, 0]);
+            }
+            test.done();
+        },
+
+        // float64
+        testFloat64lUnpack: function(test) {
+            test.expect(1);
+            if(typeof Float64Array === 'undefined') {
+                test.ok(true, 'browser does not support Float32Array');
+            } else {
+                var struct = (new Restruct).float64l('test');
+                test.deepEqual(struct.unpack([0, 240, 255, 240, 255, 240, 255, 0]), {test: 7.277771372690443e-304});
+            }
+            test.done();
+        },
+
+        testFloat64lPack: function(test) {
+            test.expect(1);
+            if(typeof Float64Array === 'undefined') {
+                test.ok(true, 'browser does not support Float32Array');
+            } else {
+                var struct = (new Restruct).float64l('test');
+                test.deepEqual(struct.pack({test: 7.277771372690443e-304}, []), [0, 240, 255, 240, 255, 240, 255, 0]);
+            }
+            test.done();
+        },
+
+        testFloat64bUnpack: function(test) {
+            test.expect(1);
+            if(typeof Float64Array === 'undefined') {
+                test.ok(true, 'browser does not support Float32Array');
+            } else {
+                var struct = (new Restruct).float64b('test');
+                test.deepEqual(struct.unpack([0, 255, 240, 255, 240, 255, 240, 0]), {test: 7.277771372690443e-304});
+            }
+            test.done();
+        },
+
+        testFloat64bPack: function(test) {
+            test.expect(1);
+            if(typeof Float64Array === 'undefined') {
+                test.ok(true, 'browser does not support Float32Array');
+            } else {
+            var struct = (new Restruct).float64b('test');
+                test.deepEqual(struct.pack({test: 7.277771372690443e-304}, []), [0, 255, 240, 255, 240, 255, 240, 0]);
+            }
+            test.done();
+        },
+
         // string
         testStringPack: function(test) {
             test.expect(1);

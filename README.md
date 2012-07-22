@@ -102,6 +102,24 @@ Endianness: `l` specifies little-endian, `b` specifies big-endian.
 
 Signedness: `s` specifies signed, `u` specifies unsigned.
 
+### float32{l,b}
+
+The `float32` family of data types specify single precision floating-point
+numbers.
+
+Endianness: `l` specifies little-endian, `b` specifies big-endian.
+
+**Note**: Only available on platforms with typed array support.
+
+### float64{l,b}
+
+The `float64` family of data types specify single precision floating-point
+numbers.
+
+Endianness: `l` specifies little-endian, `b` specifies big-endian.
+
+**Note**: Only available on platforms with typed array support.
+
 ### string
 
 A `string` is a Unicode string of variable length, specified by the second

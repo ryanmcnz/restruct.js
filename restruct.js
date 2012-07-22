@@ -282,6 +282,110 @@
             return this;
         },
 
+        // 32-bit little-endian float.
+        float32l: function(k) {
+            this.formats.push({
+                unpack: function(binary, struct) {
+                    struct[k] = (new Float32Array(new Uint8Array([
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary)
+                    ]).buffer))[0];
+                },
+
+                pack: function(struct, binary) {
+                    pack32l(new Uint32Array(new Float32Array([struct[k]]).buffer)[0], binary);
+                }
+            });
+            this.size += 4;
+            return this;
+        },
+
+        // 32-bit big-endian float.
+        float32b: function(k) {
+            this.formats.push({
+                unpack: function(binary, struct) {
+                    struct[k] = (new Float32Array(new Uint8Array([
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary)
+                    ].reverse()).buffer))[0];
+                },
+
+                pack: function(struct, binary) {
+                    pack32b(new Uint32Array(new Float32Array([struct[k]]).buffer)[0], binary);
+                }
+            });
+            this.size += 4;
+            return this;
+        },
+
+        // 64-bit little-endian float.
+        float64l: function(k) {
+            this.formats.push({
+                unpack: function(binary, struct) {
+                    struct[k] = (new Float64Array(new Uint8Array([
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary)
+                    ]).buffer))[0];
+                },
+
+                pack: function(struct, binary) {
+                    var arr = new Uint8Array(new Float64Array([struct[k]]).buffer);
+                    pack8(arr[0], binary);
+                    pack8(arr[1], binary);
+                    pack8(arr[2], binary);
+                    pack8(arr[3], binary);
+                    pack8(arr[4], binary);
+                    pack8(arr[5], binary);
+                    pack8(arr[6], binary);
+                    pack8(arr[7], binary);
+                }
+            });
+            this.size += 8;
+            return this;
+        },
+
+        // 64-bit big-endian float.
+        float64b: function(k) {
+            this.formats.push({
+                unpack: function(binary, struct) {
+                    struct[k] = (new Float64Array(new Uint8Array([
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary),
+                        unpack8(binary)
+                    ].reverse()).buffer))[0];
+                },
+
+                pack: function(struct, binary) {
+                    var arr = new Uint8Array(new Float64Array([struct[k]]).buffer);
+                    pack8(arr[7], binary);
+                    pack8(arr[6], binary);
+                    pack8(arr[5], binary);
+                    pack8(arr[4], binary);
+                    pack8(arr[3], binary);
+                    pack8(arr[2], binary);
+                    pack8(arr[1], binary);
+                    pack8(arr[0], binary);
+                }
+            });
+            this.size += 8;
+            return this;
+        },
+
         // Fixed-length string.
         string: function(k, n) {
             this.formats.push({
