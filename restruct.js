@@ -117,21 +117,6 @@
             return this;
         },
 
-        // 8-bit character, represented as a single-character string.
-        char8: function(k) {
-            this.formats.push({
-                unpack: function(binary, struct) {
-                    struct[k] = String.fromCharCode(unpack8(binary));
-                },
-
-                pack: function(struct, binary) {
-                    pack8(struct[k].charCodeAt(0), binary);
-                }
-            });
-            this.size += 1;
-            return this;
-        },
-
         // 8-bit signed integer.
         int8s: function(k) {
             this.formats.push({

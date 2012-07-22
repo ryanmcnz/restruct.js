@@ -77,10 +77,6 @@ an array to use for packing into. This can be a typed array:
 
 A `pad` is the null byte, used for empty fields of a struct.
 
-### char8
-
-A `char8` is an 8-bit integer represented as a character.
-
 ### int8{s,u}
 
 The `int8s` and `int8u` data types specify signed and unsigned 8-bit integers,
@@ -122,9 +118,10 @@ Endianness: `l` specifies little-endian, `b` specifies big-endian.
 
 ### string
 
-A `string` is a Unicode string of variable length, specified by the second
-argument to the `string(k, n)` function.
+A `string` is a string of variable length, specified by the second argument to
+the `string(k, n)` function. On packing, it will encode the string to UTF-8 and
+on unpacking will decode the string from UTF-8 (i.e. conversion of native
+JavaScript strings to/from byte sequences, respectively).
 
 During packing, if the given string is shorter than the value of `n`, the
 output will be padded with null bytes.
-

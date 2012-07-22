@@ -15,21 +15,6 @@
             test.done();
         },
 
-        // char8
-        testChar8Unpack: function(test) {
-            test.expect(1);
-            var struct = (new Restruct).char8('test');
-            test.deepEqual(struct.unpack([0x20]), {test: ' '});
-            test.done();
-        },
-
-        testChar8Pack: function(test) {
-            test.expect(1);
-            var struct = (new Restruct).char8('test');
-            test.deepEqual(struct.pack({test: ' '}, []), [0x20]);
-            test.done();
-        },
-
         // int8
         testInt8sUnpack: function(test) {
             test.expect(1);

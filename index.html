@@ -143,13 +143,6 @@
     
         <li>
         
-            <a href="#char8">char8</a>
-        
-        
-        </li>
-    
-        <li>
-        
             <a href="#int8su">int8{s,u}</a>
         
         
@@ -290,10 +283,6 @@ struct.pack({ field_name: 1 }, arr);
 
 <p>A <code>pad</code> is the null byte, used for empty fields of a struct.</p>
 
-<h3 id="char8">char8</h3>
-
-<p>A <code>char8</code> is an 8-bit integer represented as a character.</p>
-
 <h3 id="int8su">int8{s,u}</h3>
 
 <p>The <code>int8s</code> and <code>int8u</code> data types specify signed and unsigned 8-bit integers,
@@ -335,8 +324,10 @@ numbers.</p>
 
 <h3 id="string">string</h3>
 
-<p>A <code>string</code> is a Unicode string of variable length, specified by the second
-argument to the <code>string(k, n)</code> function.</p>
+<p>A <code>string</code> is a string of variable length, specified by the second argument to
+the <code>string(k, n)</code> function. On packing, it will encode the string to UTF-8 and
+on unpacking will decode the string from UTF-8 (i.e. conversion of native
+JavaScript strings to/from byte sequences, respectively).</p>
 
 <p>During packing, if the given string is shorter than the value of <code>n</code>, the
 output will be padded with null bytes.</p>
