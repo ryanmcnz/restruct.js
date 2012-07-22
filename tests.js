@@ -263,6 +263,21 @@
             test.done();
         },
 
+        // bytes
+        testBytesPack: function(test) {
+            test.expect(1);
+            var struct = (new Restruct).bytes('test', 10);
+            test.deepEqual(struct.pack({test: [0xff, 0xac, 0, 0, 0, 0, 0, 0, 0, 0]}, []), [0xff, 0xac, 0, 0, 0, 0, 0, 0, 0, 0]);
+            test.done();
+        },
+
+        testBytesUnpack: function(test) {
+            test.expect(1);
+            var struct = (new Restruct).bytes('test', 10);
+            test.deepEqual(struct.unpack([0xff, 0xac, 0, 0, 0, 0, 0, 0, 0, 0]), {test: [0xff, 0xac, 0, 0, 0, 0, 0, 0, 0, 0]});
+            test.done();
+        },
+
         // composition
         testComposedPack: function(test) {
             test.expect(2);

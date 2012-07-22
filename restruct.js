@@ -405,6 +405,35 @@
             return this;
         },
 
+        // Fixed-length bytes.
+        bytes: function(k, n) {
+            this.formats.push({
+                unpack: function(binary, struct) {
+                    var bytes = [];
+
+                    for(var i = 0; i < n; ++i) {
+                        bytes.push(unpack8(binary));
+                    }
+
+                    struct[k] = bytes;
+                },
+
+                pack: function(struct, binary) {
+                    var len = Math.min(struct[k].length, n);
+
+                    for(var i = 0; i < len; ++i) {
+                        pack8(struct[k][i], binary);
+                    }
+
+                    for(; len < n; ++len) {
+                        pack8(0, binary);
+                    }
+                }
+            });
+            this.size += n;
+            return this;
+        },
+
         // Unpack an array to a struct.
         unpack: function(array) {
             var binary = {

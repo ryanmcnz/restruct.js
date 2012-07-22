@@ -125,3 +125,10 @@ JavaScript strings to/from byte sequences, respectively).
 
 During packing, if the given string is shorter than the value of `n`, the
 output will be padded with null bytes.
+
+### bytes
+
+`bytes` denotes a variable length sequence of raw bytes in an array. Similarly
+to string, the second argument to `bytes(k, n)` specifies the number of raw
+bytes. It will pack an array of integers from 0 to 255, and will unpack the
+same.
