@@ -1,307 +1,723 @@
 (function() {
     var tests = {
-        // Pad
-        testPadUnpack: function(test) {
-            test.expect(1);
-            var struct = (new Restruct).pad();
-            test.deepEqual(struct.unpack([0]), {});
-            test.done();
-        },
-
-        testPadPack: function(test) {
-            test.expect(1);
-            var struct = (new Restruct).pad();
-            test.deepEqual(struct.pack({}, []), [0]);
-            test.done();
-        },
-
         // int8
-        testInt8sUnpack: function(test) {
+        testUnpackInt8ls: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int8s('test');
-            test.deepEqual(struct.unpack([-1]), {test: -1});
+            var struct = restruct.int8ls('test', 2);
+            test.deepEqual(struct.unpack([0x34, 0xf2]), {test: [-0xe, 0x34]});
             test.done();
         },
 
-        testInt8sPack: function(test) {
+        testUnpackOneInt8ls: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int8s('test');
-            test.deepEqual(struct.pack({test: -1}, []), [255]);
+            var struct = restruct.int8ls('test');
+            test.deepEqual(struct.unpack([0xf2]), {test: -0xe});
             test.done();
         },
 
-        testInt8uUnpack: function(test) {
+        testPackInt8ls: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int8u('test');
-            test.deepEqual(struct.unpack([-1]), {test: 255});
+            var struct = restruct.int8ls('test', 2);
+            test.deepEqual(struct.pack({test: [0xf2, 0x34]}), [0x34, 0xf2]);
             test.done();
         },
 
-        testInt8uPack: function(test) {
+        testPackOneInt8ls: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int8u('test');
-            test.deepEqual(struct.pack({test: -1}, []), [255]);
+            var struct = restruct.int8ls('test');
+            test.deepEqual(struct.pack({test: 0xf2}), [0xf2]);
+            test.done();
+        },
+
+        testUnpackInt8lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int8lu('test', 2);
+            test.deepEqual(struct.unpack([0x34, 0xf2]), {test: [0xf2, 0x34]});
+            test.done();
+        },
+
+        testUnpackOneInt8lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int8lu('test');
+            test.deepEqual(struct.unpack([0xf2]), {test: 0xf2});
+            test.done();
+        },
+
+        testPackInt8lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int8lu('test', 2);
+            test.deepEqual(struct.pack({test: [0xf2, 0x34]}), [0x34, 0xf2]);
+            test.done();
+        },
+
+        testPackOneInt8lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int8lu('test');
+            test.deepEqual(struct.pack({test: 0xf2}), [0xf2]);
+            test.done();
+        },
+
+        testUnpackInt8bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int8bs('test', 2);
+            test.deepEqual(struct.unpack([0xf2, 0x34]), {test: [-0xe, 0x34]});
+            test.done();
+        },
+
+        testUnpackOneInt8bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int8bs('test');
+            test.deepEqual(struct.unpack([0xf2]), {test: -0xe});
+            test.done();
+        },
+
+        testPackInt8bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int8bs('test', 2);
+            test.deepEqual(struct.pack({test: [0xf2, 0x34]}), [0xf2, 0x34]);
+            test.done();
+        },
+
+        testPackOneInt8bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int8bs('test');
+            test.deepEqual(struct.pack({test: 0xf2}), [0xf2]);
+            test.done();
+        },
+
+        testUnpackInt8bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int8bu('test', 2);
+            test.deepEqual(struct.unpack([0xf2, 0x34]), {test: [0xf2, 0x34]});
+            test.done();
+        },
+
+        testUnpackOneInt8bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int8bu('test');
+            test.deepEqual(struct.unpack([0xf2]), {test: 0xf2});
+            test.done();
+        },
+
+        testPackInt8bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int8bu('test', 2);
+            test.deepEqual(struct.pack({test: [0xf2, 0x34]}), [0xf2, 0x34]);
+            test.done();
+        },
+
+        testPackOneInt8bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int8bu('test');
+            test.deepEqual(struct.pack({test: 0xf2}), [0xf2]);
             test.done();
         },
 
         // int16
-        testInt16lsUnpack: function(test) {
+        testUnpackInt16ls: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int16ls('test');
-            test.deepEqual(struct.unpack([0, 255]), {test: -256});
+            var struct = restruct.int16ls('test', 2);
+            test.deepEqual(struct.unpack([0x78, 0xf6, 0x34, 0xf2]), {test: [-0xdcc, -0x988]});
             test.done();
         },
 
-        testInt16lsPack: function(test) {
+        testUnpackOneInt16ls: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int16ls('test');
-            test.deepEqual(struct.pack({test: -256}, []), [0, 255]);
+            var struct = restruct.int16ls('test');
+            test.deepEqual(struct.unpack([0x34, 0xf2]), {test: -0xdcc});
             test.done();
         },
 
-        testInt16bsUnpack: function(test) {
+        testPackInt16ls: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int16bs('test');
-            test.deepEqual(struct.unpack([255, 0]), {test: -256});
+            var struct = restruct.int16ls('test', 2);
+            test.deepEqual(struct.pack({test: [0xf234, 0xf678]}), [0x78, 0xf6, 0x34, 0xf2]);
             test.done();
         },
 
-        testInt16bsPack: function(test) {
+        testPackOneInt16ls: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int16bs('test');
-            test.deepEqual(struct.pack({test: -256}, []), [255, 0]);
+            var struct = restruct.int16ls('test');
+            test.deepEqual(struct.pack({test: 0xf234}), [0x34, 0xf2]);
             test.done();
         },
 
-        testInt16luUnpack: function(test) {
+        testUnpackInt16lu: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int16lu('test');
-            test.deepEqual(struct.unpack([1, 0]), {test: 1});
+            var struct = restruct.int16lu('test', 2);
+            test.deepEqual(struct.unpack([0x78, 0xf6, 0x34, 0xf2]), {test: [0xf234, 0xf678]});
             test.done();
         },
 
-        testInt16luPack: function(test) {
+        testUnpackOneInt16lu: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int16lu('test');
-            test.deepEqual(struct.pack({test: 1}, []), [1, 0]);
+            var struct = restruct.int16lu('test');
+            test.deepEqual(struct.unpack([0x34, 0xf2]), {test: 0xf234});
             test.done();
         },
 
-        testInt16buUnpack: function(test) {
+        testPackInt16lu: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int16bu('test');
-            test.deepEqual(struct.unpack([0, 1]), {test: 1});
+            var struct = restruct.int16lu('test', 2);
+            test.deepEqual(struct.pack({test: [0xf234, 0xf678]}), [0x78, 0xf6, 0x34, 0xf2]);
             test.done();
         },
 
-        testInt16buPack: function(test) {
+        testPackOneInt16lu: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int16bu('test');
-            test.deepEqual(struct.pack({test: 1}, []), [0, 1]);
+            var struct = restruct.int16lu('test');
+            test.deepEqual(struct.pack({test: 0xf234}), [0x34, 0xf2]);
+            test.done();
+        },
+
+        testUnpackInt16bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int16bs('test', 2);
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0xf6, 0x78]), {test: [-0xdcc, -0x988]});
+            test.done();
+        },
+
+        testUnpackOneInt16bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int16bs('test');
+            test.deepEqual(struct.unpack([0xf2, 0x34]), {test: -0xdcc});
+            test.done();
+        },
+
+        testPackInt16bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int16bs('test', 2);
+            test.deepEqual(struct.pack({test: [0xf234, 0xf678]}), [0xf2, 0x34, 0xf6, 0x78]);
+            test.done();
+        },
+
+        testPackOneInt16bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int16bs('test');
+            test.deepEqual(struct.pack({test: 0xf234}), [0xf2, 0x34]);
+            test.done();
+        },
+
+        testUnpackInt16bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int16bu('test', 2);
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0xf6, 0x78]), {test: [0xf234, 0xf678]});
+            test.done();
+        },
+
+        testUnpackOneInt16bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int16bu('test');
+            test.deepEqual(struct.unpack([0xf2, 0x34]), {test: 0xf234});
+            test.done();
+        },
+
+        testPackInt16bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int16bu('test', 2);
+            test.deepEqual(struct.pack({test: [0xf234, 0xf678]}), [0xf2, 0x34, 0xf6, 0x78]);
+            test.done();
+        },
+
+        testPackOneInt16bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int16bu('test');
+            test.deepEqual(struct.pack({test: 0xf234}), [0xf2, 0x34]);
+            test.done();
+        },
+
+        // int24
+        testUnpackInt24ls: function(test) {
+            test.expect(1);
+            var struct = restruct.int24ls('test', 2);
+            test.deepEqual(struct.unpack([0xab, 0x90, 0xf8, 0x56, 0x34, 0xf2]), {test: [-0xdcbaa, -0x76f55]});
+            test.done();
+        },
+
+        testUnpackOneInt24ls: function(test) {
+            test.expect(1);
+            var struct = restruct.int24ls('test');
+            test.deepEqual(struct.unpack([0x56, 0x34, 0xf2]), {test: -0xdcbaa});
+            test.done();
+        },
+
+        testPackInt24ls: function(test) {
+            test.expect(1);
+            var struct = restruct.int24ls('test', 2);
+            test.deepEqual(struct.pack({test: [0xf23456, 0xf890ab]}), [0xab, 0x90, 0xf8, 0x56, 0x34, 0xf2]);
+            test.done();
+        },
+
+        testPackOneInt24ls: function(test) {
+            test.expect(1);
+            var struct = restruct.int24ls('test');
+            test.deepEqual(struct.pack({test: 0xf23456}), [0x56, 0x34, 0xf2]);
+            test.done();
+        },
+
+        testUnpackInt24lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int24lu('test', 2);
+            test.deepEqual(struct.unpack([0xab, 0x90, 0xf8, 0x56, 0x34, 0xf2]), {test: [0xf23456, 0xf890ab]});
+            test.done();
+        },
+
+        testUnpackOneInt24lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int24lu('test');
+            test.deepEqual(struct.unpack([0x56, 0x34, 0xf2]), {test: 0xf23456});
+            test.done();
+        },
+
+        testPackInt24lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int24lu('test', 2);
+            test.deepEqual(struct.pack({test: [0xf23456, 0xf890ab]}), [0xab, 0x90, 0xf8, 0x56, 0x34, 0xf2]);
+            test.done();
+        },
+
+        testPackOneInt24lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int24lu('test');
+            test.deepEqual(struct.pack({test: 0xf23456}), [0x56, 0x34, 0xf2]);
+            test.done();
+        },
+
+        testUnpackInt24bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int24bs('test', 2);
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56, 0xf8, 0x90, 0xab]), {test: [-0xdcbaa, -0x76f55]});
+            test.done();
+        },
+
+        testUnpackOneInt24bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int24bs('test');
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56]), {test: -0xdcbaa});
+            test.done();
+        },
+
+        testPackInt24bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int24bs('test', 2);
+            test.deepEqual(struct.pack({test: [0xf23456, 0xf890ab]}), [0xf2, 0x34, 0x56, 0xf8, 0x90, 0xab]);
+            test.done();
+        },
+
+        testPackOneInt24bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int24bs('test');
+            test.deepEqual(struct.pack({test: 0xf23456}), [0xf2, 0x34, 0x56]);
+            test.done();
+        },
+
+        testUnpackInt24bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int24bu('test', 2);
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56, 0xf8, 0x90, 0xab]), {test: [0xf23456, 0xf890ab]});
+            test.done();
+        },
+
+        testUnpackOneInt24bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int24bu('test');
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56]), {test: 0xf23456});
+            test.done();
+        },
+
+        testPackInt24bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int24bu('test', 2);
+            test.deepEqual(struct.pack({test: [0xf23456, 0xf890ab]}), [0xf2, 0x34, 0x56, 0xf8, 0x90, 0xab]);
+            test.done();
+        },
+
+        testPackOneInt24bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int24bu('test');
+            test.deepEqual(struct.pack({test: 0xf23456}), [0xf2, 0x34, 0x56]);
             test.done();
         },
 
         // int32
-        testInt32lsUnpack: function(test) {
+        testUnpackInt32ls: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int32ls('test');
-            test.deepEqual(struct.unpack([0, 255, 255, 255]), {test: -256});
+            var struct = restruct.int32ls('test', 2);
+            test.deepEqual(struct.unpack([0xef, 0xcd, 0xab, 0xf0, 0x78, 0x56, 0x34, 0xf2]), {test: [-0xdcba988, -0xf543211]});
             test.done();
         },
 
-        testInt32lsPack: function(test) {
+        testUnpackOneInt32ls: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int32ls('test');
-            test.deepEqual(struct.pack({test: -256}, []), [0, 255, 255, 255]);
+            var struct = restruct.int32ls('test');
+            test.deepEqual(struct.unpack([0x78, 0x56, 0x34, 0xf2]), {test: -0xdcba988});
             test.done();
         },
 
-        testInt32bsUnpack: function(test) {
+        testPackInt32ls: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int32bs('test');
-            test.deepEqual(struct.unpack([255, 255, 255, 0]), {test: -256});
+            var struct = restruct.int32ls('test', 2);
+            test.deepEqual(struct.pack({test: [0xf2345678, 0xf0abcdef]}), [0xef, 0xcd, 0xab, 0xf0, 0x78, 0x56, 0x34, 0xf2]);
             test.done();
         },
 
-        testInt32bsPack: function(test) {
+        testPackOneInt32ls: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int32bs('test');
-            test.deepEqual(struct.pack({test: -256}, []), [255, 255, 255, 0]);
+            var struct = restruct.int32ls('test');
+            test.deepEqual(struct.pack({test: 0xf2345678}), [0x78, 0x56, 0x34, 0xf2]);
             test.done();
         },
 
-        testInt32luUnpack: function(test) {
+        testUnpackInt32lu: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int32lu('test');
-            test.deepEqual(struct.unpack([1, 0, 0, 0]), {test: 1});
+            var struct = restruct.int32lu('test', 2);
+            test.deepEqual(struct.unpack([0xef, 0xcd, 0xab, 0xf0, 0x78, 0x56, 0x34, 0xf2]), {test: [0xf2345678, 0xf0abcdef]});
             test.done();
         },
 
-        testInt32luPack: function(test) {
+        testUnpackOneInt32lu: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int32lu('test');
-            test.deepEqual(struct.pack({test: 1}, []), [1, 0, 0, 0]);
+            var struct = restruct.int32lu('test');
+            test.deepEqual(struct.unpack([0x78, 0x56, 0x34, 0xf2]), {test: 0xf2345678});
             test.done();
         },
 
-        testInt32buUnpack: function(test) {
+        testPackInt32lu: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int32bu('test');
-            test.deepEqual(struct.unpack([0, 0, 0, 1]), {test: 1});
+            var struct = restruct.int32lu('test', 2);
+            test.deepEqual(struct.pack({test: [0xf2345678, 0xf0abcdef]}), [0xef, 0xcd, 0xab, 0xf0, 0x78, 0x56, 0x34, 0xf2]);
             test.done();
         },
 
-        testInt32buPack: function(test) {
+        testPackOneInt32lu: function(test) {
             test.expect(1);
-            var struct = (new Restruct).int32bu('test');
-            test.deepEqual(struct.pack({test: 1}, []), [0, 0, 0, 1]);
+            var struct = restruct.int32lu('test');
+            test.deepEqual(struct.pack({test: 0xf2345678}), [0x78, 0x56, 0x34, 0xf2]);
             test.done();
         },
 
-        // float32
-        testFloat32lUnpack: function(test) {
+        testUnpackInt32bs: function(test) {
             test.expect(1);
-            if(typeof Float32Array === 'undefined') {
-                test.ok(true, 'browser does not support Float32Array');
-            } else {
-                var struct = (new Restruct).float32l('test');
-                test.deepEqual(struct.unpack([0, 240, 255, 0]), {test: 2.3504147297935876e-38});
-            }
+            var struct = restruct.int32bs('test', 2);
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56, 0x78, 0xf0, 0xab, 0xcd, 0xef]), {test: [-0xdcba988, -0xf543211]});
             test.done();
         },
 
-        testFloat32lPack: function(test) {
+        testUnpackOneInt32bs: function(test) {
             test.expect(1);
-            if(typeof Float32Array === 'undefined') {
-                test.ok(true, 'browser does not support Float32Array');
-            } else {
-                var struct = (new Restruct).float32l('test');
-                test.deepEqual(struct.pack({test: 2.3504147297935876e-38}, []), [0, 240, 255, 0]);
-            }
+            var struct = restruct.int32bs('test');
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56, 0x78]), {test: -0xdcba988});
             test.done();
         },
 
-        testFloat32bUnpack: function(test) {
+        testPackInt32bs: function(test) {
             test.expect(1);
-            if(typeof Float32Array === 'undefined') {
-                test.ok(true, 'browser does not support Float32Array');
-            } else {
-                var struct = (new Restruct).float32b('test');
-                test.deepEqual(struct.unpack([0, 255, 240, 0]), {test: 2.3504147297935876e-38});
-            }
+            var struct = restruct.int32bs('test', 2);
+            test.deepEqual(struct.pack({test: [0xf2345678, 0xf0abcdef]}), [0xf2, 0x34, 0x56, 0x78, 0xf0, 0xab, 0xcd, 0xef]);
             test.done();
         },
 
-        testFloat32bPack: function(test) {
+        testPackOneInt32bs: function(test) {
             test.expect(1);
-            if(typeof Float32Array === 'undefined') {
-                test.ok(true, 'browser does not support Float32Array');
-            } else {
-                var struct = (new Restruct).float32b('test');
-                test.deepEqual(struct.pack({test: 2.3504147297935876e-38}, []), [0, 255, 240, 0]);
-            }
+            var struct = restruct.int32bs('test');
+            test.deepEqual(struct.pack({test: 0xf2345678}), [0xf2, 0x34, 0x56, 0x78]);
             test.done();
         },
 
-        // float64
-        testFloat64lUnpack: function(test) {
+        testUnpackInt32bu: function(test) {
             test.expect(1);
-            if(typeof Float64Array === 'undefined') {
-                test.ok(true, 'browser does not support Float32Array');
-            } else {
-                var struct = (new Restruct).float64l('test');
-                test.deepEqual(struct.unpack([0, 240, 255, 240, 255, 240, 255, 0]), {test: 7.277771372690443e-304});
-            }
+            var struct = restruct.int32bu('test', 2);
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56, 0x78, 0xf0, 0xab, 0xcd, 0xef]), {test: [0xf2345678, 0xf0abcdef]});
             test.done();
         },
 
-        testFloat64lPack: function(test) {
+        testUnpackOneInt32bu: function(test) {
             test.expect(1);
-            if(typeof Float64Array === 'undefined') {
-                test.ok(true, 'browser does not support Float32Array');
-            } else {
-                var struct = (new Restruct).float64l('test');
-                test.deepEqual(struct.pack({test: 7.277771372690443e-304}, []), [0, 240, 255, 240, 255, 240, 255, 0]);
-            }
+            var struct = restruct.int32bu('test');
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56, 0x78]), {test: 0xf2345678});
             test.done();
         },
 
-        testFloat64bUnpack: function(test) {
+        testPackInt32bu: function(test) {
             test.expect(1);
-            if(typeof Float64Array === 'undefined') {
-                test.ok(true, 'browser does not support Float32Array');
-            } else {
-                var struct = (new Restruct).float64b('test');
-                test.deepEqual(struct.unpack([0, 255, 240, 255, 240, 255, 240, 0]), {test: 7.277771372690443e-304});
-            }
+            var struct = restruct.int32bu('test', 2);
+            test.deepEqual(struct.pack({test: [0xf2345678, 0xf0abcdef]}), [0xf2, 0x34, 0x56, 0x78, 0xf0, 0xab, 0xcd, 0xef]);
             test.done();
         },
 
-        testFloat64bPack: function(test) {
+        testPackOneInt32bu: function(test) {
             test.expect(1);
-            if(typeof Float64Array === 'undefined') {
-                test.ok(true, 'browser does not support Float32Array');
-            } else {
-            var struct = (new Restruct).float64b('test');
-                test.deepEqual(struct.pack({test: 7.277771372690443e-304}, []), [0, 255, 240, 255, 240, 255, 240, 0]);
-            }
+            var struct = restruct.int32bu('test');
+            test.deepEqual(struct.pack({test: 0xf2345678}), [0xf2, 0x34, 0x56, 0x78]);
             test.done();
         },
+
+        // int40
+        testUnpackInt40ls: function(test) {
+            test.expect(1);
+            var struct = restruct.int40ls('test', 2);
+            test.deepEqual(struct.unpack([0x34, 0x12, 0xef, 0xcd, 0xfb, 0x90, 0x78, 0x56, 0x34, 0xf2]), {test: [-0xdcba98770, -0x43210edcc]});
+            test.done();
+        },
+
+        testUnpackOneInt40ls: function(test) {
+            test.expect(1);
+            var struct = restruct.int40ls('test');
+            test.deepEqual(struct.unpack([0x90, 0x78, 0x56, 0x34, 0xf2]), {test: -0xdcba98770});
+            test.done();
+        },
+
+        testPackInt40ls: function(test) {
+            test.expect(1);
+            var struct = restruct.int40ls('test', 2);
+            test.deepEqual(struct.pack({test: [0xf234567890, 0xfbcdef1234]}), [0x34, 0x12, 0xef, 0xcd, 0xfb, 0x90, 0x78, 0x56, 0x34, 0xf2]);
+            test.done();
+        },
+
+        testPackOneInt40ls: function(test) {
+            test.expect(1);
+            var struct = restruct.int40ls('test');
+            test.deepEqual(struct.pack({test: 0xf234567890}), [0x90, 0x78, 0x56, 0x34, 0xf2]);
+            test.done();
+        },
+
+        testUnpackInt40lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int40lu('test', 2);
+            test.deepEqual(struct.unpack([0x34, 0x12, 0xef, 0xcd, 0xfb, 0x90, 0x78, 0x56, 0x34, 0xf2]), {test: [0xf234567890, 0xfbcdef1234]});
+            test.done();
+        },
+
+        testUnpackOneInt40lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int40lu('test');
+            test.deepEqual(struct.unpack([0x90, 0x78, 0x56, 0x34, 0xf2]), {test: 0xf234567890});
+            test.done();
+        },
+
+        testPackInt40lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int40lu('test', 2);
+            test.deepEqual(struct.pack({test: [0xf234567890, 0xfbcdef1234]}), [0x34, 0x12, 0xef, 0xcd, 0xfb, 0x90, 0x78, 0x56, 0x34, 0xf2]);
+            test.done();
+        },
+
+        testPackOneInt40lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int40lu('test');
+            test.deepEqual(struct.pack({test: 0xf234567890}), [0x90, 0x78, 0x56, 0x34, 0xf2]);
+            test.done();
+        },
+
+        testUnpackInt40bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int40bs('test', 2);
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56, 0x78, 0x90, 0xfb, 0xcd, 0xef, 0x12, 0x34]), {test: [-0xdcba98770, -0x43210edcc]});
+            test.done();
+        },
+
+        testUnpackOneInt40bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int40bs('test');
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56, 0x78, 0x90]), {test: -0xdcba98770});
+            test.done();
+        },
+
+        testPackInt40bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int40bs('test', 2);
+            test.deepEqual(struct.pack({test: [0xf234567890, 0xfbcdef1234]}), [0xf2, 0x34, 0x56, 0x78, 0x90, 0xfb, 0xcd, 0xef, 0x12, 0x34]);
+            test.done();
+        },
+
+        testPackOneInt40bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int40bs('test');
+            test.deepEqual(struct.pack({test: 0xf234567890}), [0xf2, 0x34, 0x56, 0x78, 0x90]);
+            test.done();
+        },
+
+        testUnpackInt40bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int40bu('test', 2);
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56, 0x78, 0x90, 0xfb, 0xcd, 0xef, 0x12, 0x34]), {test: [0xf234567890, 0xfbcdef1234]});
+            test.done();
+        },
+
+        testUnpackOneInt40bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int40bu('test');
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56, 0x78, 0x90]), {test: 0xf234567890});
+            test.done();
+        },
+
+        testPackInt40bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int40bu('test', 2);
+            test.deepEqual(struct.pack({test: [0xf234567890, 0xfbcdef1234]}), [0xf2, 0x34, 0x56, 0x78, 0x90, 0xfb, 0xcd, 0xef, 0x12, 0x34]);
+            test.done();
+        },
+
+        testPackOneInt40bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int40bu('test');
+            test.deepEqual(struct.pack({test: 0xf234567890}), [0xf2, 0x34, 0x56, 0x78, 0x90]);
+            test.done();
+        },
+
+        // int48
+        testUnpackInt48ls: function(test) {
+            test.expect(1);
+            var struct = restruct.int48ls('test', 2);
+            test.deepEqual(struct.unpack([0x56, 0x34, 0x12, 0xef, 0xcd, 0xfb, 0xab, 0x90, 0x78, 0x56, 0x34, 0xf2]), {test: [-0xdcba9876f55, -0x43210edcbaa]});
+            test.done();
+        },
+
+        testUnpackOneInt48ls: function(test) {
+            test.expect(1);
+            var struct = restruct.int48ls('test');
+            test.deepEqual(struct.unpack([0xab, 0x90, 0x78, 0x56, 0x34, 0xf2]), {test: -0xdcba9876f55});
+            test.done();
+        },
+
+        testPackInt48ls: function(test) {
+            test.expect(1);
+            var struct = restruct.int48ls('test', 2);
+            test.deepEqual(struct.pack({test: [0xf234567890ab, 0xfbcdef123456]}), [0x56, 0x34, 0x12, 0xef, 0xcd, 0xfb, 0xab, 0x90, 0x78, 0x56, 0x34, 0xf2]);
+            test.done();
+        },
+
+        testPackOneInt48ls: function(test) {
+            test.expect(1);
+            var struct = restruct.int48ls('test');
+            test.deepEqual(struct.pack({test: 0xf234567890ab}), [0xab, 0x90, 0x78, 0x56, 0x34, 0xf2]);
+            test.done();
+        },
+
+        testUnpackInt48lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int48lu('test', 2);
+            test.deepEqual(struct.unpack([0x56, 0x34, 0x12, 0xef, 0xcd, 0xfb, 0xab, 0x90, 0x78, 0x56, 0x34, 0xf2]), {test: [0xf234567890ab, 0xfbcdef123456]});
+            test.done();
+        },
+
+        testUnpackOneInt48lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int48lu('test');
+            test.deepEqual(struct.unpack([0xab, 0x90, 0x78, 0x56, 0x34, 0xf2]), {test: 0xf234567890ab});
+            test.done();
+        },
+
+        testPackInt48lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int48lu('test', 2);
+            test.deepEqual(struct.pack({test: [0xf234567890ab, 0xfbcdef123456]}), [0x56, 0x34, 0x12, 0xef, 0xcd, 0xfb, 0xab, 0x90, 0x78, 0x56, 0x34, 0xf2]);
+            test.done();
+        },
+
+        testPackOneInt48lu: function(test) {
+            test.expect(1);
+            var struct = restruct.int48lu('test');
+            test.deepEqual(struct.pack({test: 0xf234567890ab}), [0xab, 0x90, 0x78, 0x56, 0x34, 0xf2]);
+            test.done();
+        },
+
+        testUnpackInt48bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int48bs('test', 2);
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56, 0x78, 0x90, 0xab, 0xfb, 0xcd, 0xef, 0x12, 0x34, 0x56]), {test: [-0xdcba9876f55, -0x43210edcbaa]});
+            test.done();
+        },
+
+        testUnpackOneInt48bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int48bs('test');
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56, 0x78, 0x90, 0xab]), {test: -0xdcba9876f55});
+            test.done();
+        },
+
+        testPackInt48bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int48bs('test', 2);
+            test.deepEqual(struct.pack({test: [0xf234567890ab, 0xfbcdef123456]}), [0xf2, 0x34, 0x56, 0x78, 0x90, 0xab, 0xfb, 0xcd, 0xef, 0x12, 0x34, 0x56]);
+            test.done();
+        },
+
+        testPackOneInt48bs: function(test) {
+            test.expect(1);
+            var struct = restruct.int48bs('test');
+            test.deepEqual(struct.pack({test: 0xf234567890ab}), [0xf2, 0x34, 0x56, 0x78, 0x90, 0xab]);
+            test.done();
+        },
+
+        testUnpackInt48bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int48bu('test', 2);
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56, 0x78, 0x90, 0xab, 0xfb, 0xcd, 0xef, 0x12, 0x34, 0x56]), {test: [0xf234567890ab, 0xfbcdef123456]});
+            test.done();
+        },
+
+        testUnpackOneInt48bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int48bu('test');
+            test.deepEqual(struct.unpack([0xf2, 0x34, 0x56, 0x78, 0x90, 0xab]), {test: 0xf234567890ab});
+            test.done();
+        },
+
+        testPackInt48bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int48bu('test', 2);
+            test.deepEqual(struct.pack({test: [0xf234567890ab, 0xfbcdef123456]}), [0xf2, 0x34, 0x56, 0x78, 0x90, 0xab, 0xfb, 0xcd, 0xef, 0x12, 0x34, 0x56]);
+            test.done();
+        },
+
+        testPackOneInt48bu: function(test) {
+            test.expect(1);
+            var struct = restruct.int48bu('test');
+            test.deepEqual(struct.pack({test: 0xf234567890ab}), [0xf2, 0x34, 0x56, 0x78, 0x90, 0xab]);
+            test.done();
+        },
+
 
         // string
-        testStringPack: function(test) {
+        testPackString: function(test) {
             test.expect(1);
-            var struct = (new Restruct).string('test', 10);
+            var struct = restruct.string('test', 10);
             test.deepEqual(struct.pack({test: "hello\u00ac"}, []), [104, 101, 108, 108, 111, 194, 172, 0, 0, 0]);
             test.done();
         },
 
-        testStringUnpack: function(test) {
+        testUnpackString: function(test) {
             test.expect(1);
-            var struct = (new Restruct).string('test', 10);
+            var struct = restruct.string('test', 10);
             test.deepEqual(struct.unpack([104, 101, 108, 108, 111, 194, 172, 0, 0, 0]), {test: "hello\u00ac"});
             test.done();
         },
 
-        // bytes
-        testBytesPack: function(test) {
-            test.expect(1);
-            var struct = (new Restruct).bytes('test', 10);
-            test.deepEqual(struct.pack({test: [0xff, 0xac, 0, 0, 0, 0, 0, 0, 0, 0]}, []), [0xff, 0xac, 0, 0, 0, 0, 0, 0, 0, 0]);
-            test.done();
-        },
-
-        testBytesUnpack: function(test) {
-            test.expect(1);
-            var struct = (new Restruct).bytes('test', 10);
-            test.deepEqual(struct.unpack([0xff, 0xac, 0, 0, 0, 0, 0, 0, 0, 0]), {test: [0xff, 0xac, 0, 0, 0, 0, 0, 0, 0, 0]});
-            test.done();
-        },
-
         // composition
-        testComposedPack: function(test) {
+        testPackComposed: function(test) {
             test.expect(2);
-            var struct = (new Restruct).string('a', 10).int8s('b');
+            var struct = restruct.string('a', 10).int8ls('b');
             test.strictEqual(struct.size, 11);
             test.deepEqual(struct.pack({a: "hello", b: -1}, []), [104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 255]);
             test.done();
         },
 
-        testComposedUnpack: function(test) {
+        testUnpackComposed: function(test) {
             test.expect(1);
-            var struct = (new Restruct).string('a', 10).int8s('b');
+            var struct = restruct.string('a', 10).int8ls('b');
             test.deepEqual(struct.unpack([104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 255]), {a: "hello", b: -1});
             test.done();
         },
 
         // typed arrays
-        testTypedArrayPack: function(test) {
+        testPackTypedArray: function(test) {
             test.expect(1);
 
             if(typeof Uint8Array === 'undefined') {
                 test.ok(true, "browser does not support typed arrays");
             } else {
-                var struct = (new Restruct).string('a', 10).int8s('b');
+                var struct = restruct.string('a', 10).int8ls('b');
 
                 var arr = new Uint8Array(11);
                 struct.pack({a: "hello", b: -1}, arr);
@@ -316,27 +732,26 @@
             test.done();
         },
 
-        testTypedArrayUnpack: function(test) {
+        testUnpackTypedArray: function(test) {
             test.expect(1);
             if(typeof Uint8Array === 'undefined') {
                 test.ok(true, "browser does not support typed arrays");
             } else {
-                var struct = (new Restruct).string('a', 10).int8s('b');
+                var struct = restruct.string('a', 10).int8ls('b');
                 test.deepEqual(struct.unpack(new Uint8Array([104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 255])), {a: "hello", b: -1});
             }
             test.done();
         }
     };
 
-    var Restruct;
+    var restruct;
 
     if(typeof module !== "undefined" && module.exports) {
-        Restruct = require(__dirname + '/restruct.js');
+        restruct = require(__dirname + '/restruct.js');
         module.exports = tests;
     }
     if(typeof window !== "undefined") {
-        Restruct = window.Restruct;
+        restruct = window.restruct;
         window.tests = tests;
     }
-})()
-
+})();

@@ -128,6 +128,13 @@
     
         <li>
         
+            <a href="#Size">Size</a>
+        
+        
+        </li>
+    
+        <li>
+        
             <a href="#Data-Types">Data Types</a>
         
         
@@ -143,35 +150,7 @@
     
         <li>
         
-            <a href="#int8su">int8{s,u}</a>
-        
-        
-        </li>
-    
-        <li>
-        
-            <a href="#int16lbsu">int16{l,b}{s,u}</a>
-        
-        
-        </li>
-    
-        <li>
-        
-            <a href="#int32lbsu">int32{l,b}{s,u}</a>
-        
-        
-        </li>
-    
-        <li>
-        
-            <a href="#float32lb">float32{l,b}</a>
-        
-        
-        </li>
-    
-        <li>
-        
-            <a href="#float64lb">float64{l,b}</a>
+            <a href="#int81624324048lbsu">int{8,16,24,32,40,48}{l,b}{s,u}</a>
         
         
         </li>
@@ -179,13 +158,6 @@
         <li>
         
             <a href="#string">string</a>
-        
-        
-        </li>
-    
-        <li>
-        
-            <a href="#bytes">bytes</a>
         
         
         </li>
@@ -217,9 +189,9 @@ emitters. It works in both the browser and on Node.</p>
 
 <p>Example:</p>
 
-<pre><code>&gt; struct = (new Restruct).
-... int8u('opcode').
-... int8u('version').
+<pre><code>&gt; struct = restruct.
+... int8lu('opcode').
+... int8lu('version').
 ... string('username', 20);
 
 &gt; packet = struct.pack({opcode: 1, version: 1, username: "test"});
@@ -237,51 +209,72 @@ emitters. It works in both the browser and on Node.</p>
 
 <h3 id="Initializing">Initializing</h3>
 
-<p>A <code>restruct.js</code> structure can be defined by calling the constructor:</p>
+<p>A <code>restruct.js</code> structure can be defined by using the <code>restruct</code> object, e.g.:</p>
 
-<pre><code>struct = (new Restruct)
+<pre><code>restruct.type(k[, n[, buf]])
 </code></pre>
 
-<p>Various data types can then be chained on, such as <code>int8u</code>:</p>
+<p>The <code>type</code> is specified by one of the types in the <a href="#Data-Types">data types</a>
+section.</p>
 
-<pre><code>struct.int8u('field_name')
+<p>The parameter <code>k</code> specifies the name of the field in the resulting struct.</p>
+
+<p>The parameter <code>n</code> is optional and, if supplied, will unpack the field into an
+array rather than a scalar value — this is useful for array values in structs.
+The array will be unpacked according to the endianness of the data type. If the
+supplied array during packing is shorter than <code>n</code>, the result will be padded
+with null bytes.</p>
+
+<p>The parameter <code>buf</code> is also optional and, if supplied, specifies the array
+the field will be unpacked into, which can be useful for using typed arrays
+as buffers.</p>
+
+<p>An example of a structure:</p>
+
+<pre><code>struct = restruct.
+    int32bu('start_time').
+    int32bu('end_time').
+    int8bu('keys', 10);
 </code></pre>
-
-<p>The first parameter to the data type specification function is the field name
-for the struct.</p>
-
-<p>See the <a href="#Data-Types">data types</a> section for all of the data types supported.</p>
 
 <h3 id="Unpacking">Unpacking</h3>
 
 <p>Once a structure has been initialized, the <code>unpack</code> method can be used on any
 object that supports indexing (both normal and typed arrays):</p>
 
-<pre><code>struct.unpack([1]);
+<pre><code>struct.unpack([ 0, 0, 0, 1, 73, 150, 2, 210, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ]);
 </code></pre>
 
 <p>This will return the parsed structure:</p>
 
-<pre><code>{ field_name: 1 }
+<pre><code>{ start_time: 1, end_time: 1234567890, keys: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ]}
 </code></pre>
 
 <h3 id="Packing">Packing</h3>
 
 <p><code>restruct.js</code> also supports packing structures back to series of bytes:</p>
 
-<pre><code>struct.pack({ field_name: 1 });
+<pre><code>struct.pack({ start_time: 1, end_time: 1234567890, keys: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ]});
 </code></pre>
 
 <p>This will return an array of bytes:</p>
 
-<pre><code>[ 1 ]
+<pre><code>[ 0, 0, 0, 1, 73, 150, 2, 210, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ]
 </code></pre>
 
 <p>Optionally, the <code>struct.pack</code> function takes a second argument which specifies
 an array to use for packing into. This can be a typed array:</p>
 
 <pre><code>var arr = new Uint8Array(1);
-struct.pack({ field_name: 1 }, arr);
+struct.pack({...}, arr);
+</code></pre>
+
+<h2 id="Size">Size</h2>
+
+<p>The size of the structure can be obtained via <code>struct.size</code>, e.g.:</p>
+
+<pre><code>&gt; struct.size
+18
 </code></pre>
 
 <h2 id="Data-Types">Data Types</h2>
@@ -290,61 +283,21 @@ struct.pack({ field_name: 1 }, arr);
 
 <p>A <code>pad</code> is the null byte, used for empty fields of a struct.</p>
 
-<h3 id="int8su">int8{s,u}</h3>
+<h3 id="int81624324048lbsu">int{8,16,24,32,40,48}{l,b}{s,u}</h3>
 
-<p>The <code>int8s</code> and <code>int8u</code> data types specify signed and unsigned 8-bit integers,
-respectively.</p>
+<p>These types specify various integer types. The number is indicative of the
+bit size of the integer, the <code>l</code> and <code>b</code> indicative of little- and
+big-endianness respectively, and <code>s</code> and <code>u</code> are indicative of signedness and
+unsignedness.</p>
 
-<h3 id="int16lbsu">int16{l,b}{s,u}</h3>
-
-<p>The <code>int16</code> family of data types specify 16-bit integers.</p>
-
-<p>Endianness: <code>l</code> specifies little-endian, <code>b</code> specifies big-endian.</p>
-
-<p>Signedness: <code>s</code> specifies signed, <code>u</code> specifies unsigned.</p>
-
-<h3 id="int32lbsu">int32{l,b}{s,u}</h3>
-
-<p>The <code>int32</code> family of data types specify 32-bit integers.</p>
-
-<p>Endianness: <code>l</code> specifies little-endian, <code>b</code> specifies big-endian.</p>
-
-<p>Signedness: <code>s</code> specifies signed, <code>u</code> specifies unsigned.</p>
-
-<h3 id="float32lb">float32{l,b}</h3>
-
-<p>The <code>float32</code> family of data types specify single precision floating-point
-numbers.</p>
-
-<p>Endianness: <code>l</code> specifies little-endian, <code>b</code> specifies big-endian.</p>
-
-<p><strong>Note</strong>: Only available on platforms with typed array support.</p>
-
-<h3 id="float64lb">float64{l,b}</h3>
-
-<p>The <code>float64</code> family of data types specify single precision floating-point
-numbers.</p>
-
-<p>Endianness: <code>l</code> specifies little-endian, <code>b</code> specifies big-endian.</p>
-
-<p><strong>Note</strong>: Only available on platforms with typed array support.</p>
+<p>As a side note about endianness with regards to the <code>int8</code> data type, this only
+affects the packing/unpacking of arrays.</p>
 
 <h3 id="string">string</h3>
 
-<p>A <code>string</code> is a string of variable length, specified by the second argument to
-the <code>string(k, n)</code> function. On packing, it will encode the string to UTF-8 and
-on unpacking will decode the string from UTF-8 (i.e. conversion of native
-JavaScript strings to/from byte sequences, respectively).</p>
-
-<p>During packing, if the given string is shorter than the value of <code>n</code>, the
-output will be padded with null bytes.</p>
-
-<h3 id="bytes">bytes</h3>
-
-<p><code>bytes</code> denotes a variable length sequence of raw bytes in an array. Similarly
-to string, the second argument to <code>bytes(k, n)</code> specifies the number of raw
-bytes. It will pack an array of integers from 0 to 255, and will unpack the
-same.</p>
+<p>A <code>string</code> is a string of variable length. On packing, it will encode the
+string to UTF-8 and on unpacking will decode the string from UTF-8 (i.e.
+conversion of native JavaScript strings to/from byte sequences, respectively).</p>
     </div>
     <div class="footer">
         Generated by <a href="http://rfw.github.com/owldoc">Owldoc</a> — a hooting good time!

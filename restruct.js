@@ -9,10 +9,6 @@
     };
 
     // 8-bit routines.
-    var unsign8 = function(i) {
-        return i & 0xff;
-    };
-
     var sign8 = function(i) {
         return (i + 0x80) % 0x100 - 0x80;
     };
@@ -26,17 +22,14 @@
     };
 
     // 16-bit routines.
-    var unsign16 = function(i) {
-        return i & 0xffff;
-    };
-
     var sign16 = function(i) {
         return (i + 0x8000) % 0x10000 - 0x8000;
     };
 
     var unpack16l = function(binary) {
-        var val = binary.array[binary.offset++] & 0xff;
-        val |= (binary.array[binary.offset++] & 0xff) << 8;
+        var val = binary.array[binary.offset++];
+        val |= binary.array[binary.offset++] << 8;
+        val >>>= 0;
         return val;
     };
 
@@ -46,8 +39,9 @@
     };
 
     var unpack16b = function(binary) {
-        var val = (binary.array[binary.offset++] & 0xff) << 8;
-        val |= binary.array[binary.offset++] & 0xff;
+        var val = binary.array[binary.offset++] << 8;
+        val |= binary.array[binary.offset++];
+        val >>>= 0;
         return val;
     };
 
@@ -56,20 +50,50 @@
         binary.array[binary.offset++] = val & 0xff;
     };
 
-    // 32-bit routines.
-    var unsign32 = function(i) {
-        return i & 0xffffffff;
+    // 24-bit routines.
+    var sign24 = function(i) {
+        return (i + 0x800000) % 0x1000000 - 0x800000;
     };
 
+    var unpack24l = function(binary) {
+        var val = binary.array[binary.offset++];
+        val |= binary.array[binary.offset++] << 8;
+        val |= binary.array[binary.offset++] << 16;
+        val >>>= 0;
+        return val;
+    };
+
+    var pack24l = function(val, binary) {
+        binary.array[binary.offset++] = val & 0xff;
+        binary.array[binary.offset++] = (val >> 8) & 0xff;
+        binary.array[binary.offset++] = (val >> 16) & 0xff;
+    };
+
+    var unpack24b = function(binary) {
+        var val = binary.array[binary.offset++] << 16;
+        val |= binary.array[binary.offset++] << 8;
+        val |= binary.array[binary.offset++];
+        val >>>= 0;
+        return val;
+    };
+
+    var pack24b = function(val, binary) {
+        binary.array[binary.offset++] = (val >> 16) & 0xff;
+        binary.array[binary.offset++] = (val >> 8) & 0xff;
+        binary.array[binary.offset++] = val & 0xff;
+    };
+
+    // 32-bit routines.
     var sign32 = function(i) {
         return (i + 0x80000000) % 0x100000000 - 0x80000000;
     };
 
     var unpack32l = function(binary) {
         var val = binary.array[binary.offset++];
-        val |= binary.array[binary.offset++] << 24;
-        val |= binary.array[binary.offset++] << 16;
         val |= binary.array[binary.offset++] << 8;
+        val |= binary.array[binary.offset++] << 16;
+        val |= binary.array[binary.offset++] << 24;
+        val >>>= 0;
         return val;
     };
 
@@ -84,7 +108,8 @@
         var val = binary.array[binary.offset++] << 24;
         val |= binary.array[binary.offset++] << 16;
         val |= binary.array[binary.offset++] << 8;
-        val |= binary.array[binary.offset++] & 0xff;
+        val |= binary.array[binary.offset++];
+        val >>>= 0;
         return val;
     };
 
@@ -95,285 +120,894 @@
         binary.array[binary.offset++] = val & 0xff;
     };
 
+    // 40-bit routines.
+    var sign40 = function(i) {
+        return (i + 0x8000000000) % 0x10000000000 - 0x8000000000;
+    };
+
+    var unpack40l = function(binary) {
+        var val = binary.array[binary.offset++];
+        val |= binary.array[binary.offset++] << 8;
+        val |= binary.array[binary.offset++] << 16;
+        val |= binary.array[binary.offset++] << 24;
+        val >>>= 0;
+        val += binary.array[binary.offset++] * 0x100000000;
+        return val;
+    };
+
+    var pack40l = function(val, binary) {
+        binary.array[binary.offset++] = val & 0xff;
+        binary.array[binary.offset++] = (val >> 8) & 0xff;
+        binary.array[binary.offset++] = (val >> 16) & 0xff;
+        binary.array[binary.offset++] = (val >> 24) & 0xff;
+        binary.array[binary.offset++] = (val / 0x100000000) & 0xff;
+    };
+
+    var unpack40b = function(binary) {
+        var head = binary.array[binary.offset++] * 0x100000000;
+        var val = binary.array[binary.offset++] << 24;
+        val |= binary.array[binary.offset++] << 16;
+        val |= binary.array[binary.offset++] << 8;
+        val |= binary.array[binary.offset++];
+        val >>>= 0;
+        val += head;
+        return val;
+    };
+
+    var pack40b = function(val, binary) {
+        binary.array[binary.offset++] = (val / 0x100000000) & 0xff;
+        binary.array[binary.offset++] = (val >> 24) & 0xff;
+        binary.array[binary.offset++] = (val >> 16) & 0xff;
+        binary.array[binary.offset++] = (val >> 8) & 0xff;
+        binary.array[binary.offset++] = val & 0xff;
+    };
+
+    // 48-bit routines.
+    var sign48 = function(i) {
+        return (i + 0x800000000000) % 0x1000000000000 - 0x800000000000;
+    };
+
+    var unpack48l = function(binary) {
+        var val = binary.array[binary.offset++];
+        val |= binary.array[binary.offset++] << 8;
+        val |= binary.array[binary.offset++] << 16;
+        val |= binary.array[binary.offset++] << 24;
+        val >>>= 0;
+        val += binary.array[binary.offset++] * 0x100000000;
+        val += binary.array[binary.offset++] * 0x10000000000;
+        return val;
+    };
+
+    var pack48l = function(val, binary) {
+        binary.array[binary.offset++] = val & 0xff;
+        binary.array[binary.offset++] = (val >> 8) & 0xff;
+        binary.array[binary.offset++] = (val >> 16) & 0xff;
+        binary.array[binary.offset++] = (val >> 24) & 0xff;
+        binary.array[binary.offset++] = (val / 0x100000000) & 0xff;
+        binary.array[binary.offset++] = (val / 0x10000000000) & 0xff;
+    };
+
+    var unpack48b = function(binary) {
+        var head = binary.array[binary.offset++] * 0x10000000000;
+        head += binary.array[binary.offset++] * 0x100000000;
+        var val = binary.array[binary.offset++] << 24;
+        val |= binary.array[binary.offset++] << 16;
+        val |= binary.array[binary.offset++] << 8;
+        val |= binary.array[binary.offset++];
+        val >>>= 0;
+        val += head;
+        return val;
+    };
+
+    var pack48b = function(val, binary) {
+        binary.array[binary.offset++] = (val / 0x10000000000) & 0xff;
+        binary.array[binary.offset++] = (val / 0x100000000) & 0xff;
+        binary.array[binary.offset++] = (val >> 24) & 0xff;
+        binary.array[binary.offset++] = (val >> 16) & 0xff;
+        binary.array[binary.offset++] = (val >> 8) & 0xff;
+        binary.array[binary.offset++] = val & 0xff;
+    };
+
     // Restruct class.
-    var Restruct = function() {
-        this.formats = [];
-        this.size = 0;
+    var Restruct = function(parent, size, format) {
+        if(typeof parent === 'undefined') {
+            this.size = 0;
+            this.formats = [];
+        } else {
+            this.size = parent.size + size;
+            this.formats = parent.formats.concat(format);
+        }
     };
 
     Restruct.prototype = {
-        // Pad NUL byte.
-        pad: function() {
-            this.formats.push({
+        // Pad NUL bytes.
+        pad: function(n) {
+            if(typeof n === 'undefined') n = 1;
+
+            return new Restruct(this, n, {
                 unpack: function(binary, struct) {
-                    binary.offset++;
+                    binary.offset += n;
                 },
 
                 pack: function(struct, binary) {
-                    pack8(0, binary);
+                    for(var i = 0; i < n; ++i) {
+                        pack8(0, binary);
+                    }
                 }
             });
-            this.size += 1;
-            return this;
         },
 
-        // 8-bit signed integer.
-        int8s: function(k) {
-            this.formats.push({
+        // 8-bit signed little-endian integer.
+        int8ls: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 1, {
+                    unpack: function(binary, struct) {
+                        struct[k] = sign8(unpack8(binary));
+                    },
+
+                    pack: function(struct, binary) {
+                        pack8(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 1 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = sign8(unpack8(binary));
+                    struct[k] = buf;
+                    for(var i = n - 1; i >= 0; --i) {
+                        buf[i] = sign8(unpack8(binary));
+                    }
                 },
 
                 pack: function(struct, binary) {
-                    pack8(struct[k], binary);
+                    for(var i = n - 1; i >= 0; --i) {
+                        pack8(struct[k][i] || 0, binary);
+                    }
                 }
             });
-            this.size += 1;
-            return this;
         },
 
-        // 8-bit unsigned integer.
-        int8u: function(k) {
-            this.formats.push({
+        // 8-bit unsigned little-endian integer.
+        int8lu: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 1, {
+                    unpack: function(binary, struct) {
+                        struct[k] = unpack8(binary);
+                    },
+
+                    pack: function(struct, binary) {
+                        pack8(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 1 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = unsign8(unpack8(binary));
+                    struct[k] = buf;
+                    for(var i = n - 1; i >= 0; --i) {
+                        buf[i] = unpack8(binary);
+                    }
                 },
 
                 pack: function(struct, binary) {
-                    pack8(struct[k], binary);
+                    for(var i = n - 1; i >= 0; --i) {
+                        pack8(struct[k][i] || 0, binary);
+                    }
                 }
             });
-            this.size += 1;
-            return this;
+        },
+
+        // 8-bit signed big-endian integer.
+        int8bs: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 1, {
+                    unpack: function(binary, struct) {
+                        struct[k] = sign8(unpack8(binary));
+                    },
+
+                    pack: function(struct, binary) {
+                        pack8(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 1 * n, {
+                unpack: function(binary, struct) {
+                    struct[k] = buf;
+                    for(var i = 0; i < n; ++i) {
+                        buf[i] = sign8(unpack8(binary));
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = 0; i < n; ++i) {
+                        pack8(struct[k][i] || 0, binary);
+                    }
+                }
+            });
+        },
+
+        // 8-bit unsigned big-endian integer.
+        int8bu: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 1, {
+                    unpack: function(binary, struct) {
+                        struct[k] = unpack8(binary);
+                    },
+
+                    pack: function(struct, binary) {
+                        pack8(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 1 * n, {
+                unpack: function(binary, struct) {
+                    struct[k] = buf;
+                    for(var i = 0; i < n; ++i) {
+                        buf[i] = unpack8(binary);
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = 0; i < n; ++i) {
+                        pack8(struct[k][i] || 0, binary);
+                    }
+                }
+            });
         },
 
         // 16-bit signed little-endian integer.
-        int16ls: function(k) {
-            this.formats.push({
+        int16ls: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 2, {
+                    unpack: function(binary, struct) {
+                        struct[k] = sign16(unpack16l(binary));
+                    },
+
+                    pack: function(struct, binary) {
+                        pack16l(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 2 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = sign16(unpack16l(binary));
+                    struct[k] = buf;
+                    for(var i = n - 1; i >= 0; --i) {
+                        buf[i] = sign16(unpack16l(binary));
+                    }
                 },
 
                 pack: function(struct, binary) {
-                    pack16l(struct[k], binary);
+                    for(var i = n - 1; i >= 0; --i) {
+                        pack16l(struct[k][i] || 0, binary);
+                    }
                 }
             });
-            this.size += 2;
-            return this;
-        },
-
-        // 16-bit signed big-endian integer.
-        int16bs: function(k) {
-            this.formats.push({
-                unpack: function(binary, struct) {
-                    struct[k] = sign16(unpack16b(binary));
-                },
-
-                pack: function(struct, binary) {
-                    pack16b(struct[k], binary);
-                }
-            });
-            this.size += 2;
-            return this;
         },
 
         // 16-bit unsigned little-endian integer.
-        int16lu: function(k) {
-            this.formats.push({
+        int16lu: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 2, {
+                    unpack: function(binary, struct) {
+                        struct[k] = unpack16l(binary);
+                    },
+
+                    pack: function(struct, binary) {
+                        pack16l(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 2 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = unsign16(unpack16l(binary));
+                    struct[k] = buf;
+                    for(var i = n - 1; i >= 0; --i) {
+                        buf[i] = unpack16l(binary);
+                    }
                 },
 
                 pack: function(struct, binary) {
-                    pack16l(struct[k], binary);
+                    for(var i = n - 1; i >= 0; --i) {
+                        pack16l(struct[k][i] || 0, binary);
+                    }
                 }
             });
-            this.size += 2;
-            return this;
+        },
+
+        // 16-bit signed big-endian integer.
+        int16bs: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 2, {
+                    unpack: function(binary, struct) {
+                        struct[k] = sign16(unpack16b(binary));
+                    },
+
+                    pack: function(struct, binary) {
+                        pack16b(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 2 * n, {
+                unpack: function(binary, struct) {
+                    struct[k] = buf;
+                    for(var i = 0; i < n; ++i) {
+                        buf[i] = sign16(unpack16b(binary));
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = 0; i < n; ++i) {
+                        pack16b(struct[k][i] || 0, binary);
+                    }
+                }
+            });
         },
 
         // 16-bit unsigned big-endian integer.
-        int16bu: function(k) {
-            this.formats.push({
+        int16bu: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 2, {
+                    unpack: function(binary, struct) {
+                        struct[k] = unpack16b(binary);
+                    },
+
+                    pack: function(struct, binary) {
+                        pack16b(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 2 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = unsign16(unpack16b(binary));
+                    struct[k] = buf;
+                    for(var i = 0; i < n; ++i) {
+                        buf[i] = unpack16b(binary);
+                    }
                 },
 
                 pack: function(struct, binary) {
-                    pack16b(struct[k], binary);
+                    for(var i = 0; i < n; ++i) {
+                        pack16b(struct[k][i] || 0, binary);
+                    }
                 }
             });
-            this.size += 2;
-            return this;
+        },
+
+        // 24-bit signed little-endian integer.
+        int24ls: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 3, {
+                    unpack: function(binary, struct) {
+                        struct[k] = sign24(unpack24l(binary));
+                    },
+
+                    pack: function(struct, binary) {
+                        pack24l(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 3 * n, {
+                unpack: function(binary, struct) {
+                    struct[k] = buf;
+                    for(var i = n - 1; i >= 0; --i) {
+                        buf[i] = sign24(unpack24l(binary));
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = n - 1; i >= 0; --i) {
+                        pack24l(struct[k][i] || 0, binary);
+                    }
+                }
+            });
+        },
+
+        // 24-bit unsigned little-endian integer.
+        int24lu: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 3, {
+                    unpack: function(binary, struct) {
+                        struct[k] = unpack24l(binary);
+                    },
+
+                    pack: function(struct, binary) {
+                        pack24l(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 3 * n, {
+                unpack: function(binary, struct) {
+                    struct[k] = buf;
+                    for(var i = n - 1; i >= 0; --i) {
+                        buf[i] = unpack24l(binary);
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = n - 1; i >= 0; --i) {
+                        pack24l(struct[k][i] || 0, binary);
+                    }
+                }
+            });
+        },
+
+        // 24-bit signed big-endian integer.
+        int24bs: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 3, {
+                    unpack: function(binary, struct) {
+                        struct[k] = sign24(unpack24b(binary));
+                    },
+
+                    pack: function(struct, binary) {
+                        pack24b(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 3 * n, {
+                unpack: function(binary, struct) {
+                    struct[k] = buf;
+                    for(var i = 0; i < n; ++i) {
+                        buf[i] = sign24(unpack24b(binary));
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = 0; i < n; ++i) {
+                        pack24b(struct[k][i] || 0, binary);
+                    }
+                }
+            });
+        },
+
+        // 24-bit unsigned big-endian integer.
+        int24bu: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 3, {
+                    unpack: function(binary, struct) {
+                        struct[k] = unpack24b(binary);
+                    },
+
+                    pack: function(struct, binary) {
+                        pack24b(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 3 * n, {
+                unpack: function(binary, struct) {
+                    struct[k] = buf;
+                    for(var i = 0; i < n; ++i) {
+                        buf[i] = unpack24b(binary);
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = 0; i < n; ++i) {
+                        pack24b(struct[k][i] || 0, binary);
+                    }
+                }
+            });
         },
 
         // 32-bit signed little-endian integer.
-        int32ls: function(k) {
-            this.formats.push({
+        int32ls: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 4, {
+                    unpack: function(binary, struct) {
+                        struct[k] = sign32(unpack32l(binary));
+                    },
+
+                    pack: function(struct, binary) {
+                        pack32l(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 4 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = sign32(unpack32l(binary));
+                    struct[k] = buf;
+                    for(var i = n - 1; i >= 0; --i) {
+                        buf[i] = sign32(unpack32l(binary));
+                    }
                 },
 
                 pack: function(struct, binary) {
-                    pack32l(struct[k], binary);
+                    for(var i = n - 1; i >= 0; --i) {
+                        pack32l(struct[k][i] || 0, binary);
+                    }
                 }
             });
-            this.size += 4;
-            return this;
-        },
-
-        // 32-bit signed big-endian integer.
-        int32bs: function(k) {
-            this.formats.push({
-                unpack: function(binary, struct) {
-                    struct[k] = sign32(unpack32b(binary));
-                },
-
-                pack: function(struct, binary) {
-                    pack32b(struct[k], binary);
-                }
-            });
-            this.size += 4;
-            return this;
         },
 
         // 32-bit unsigned little-endian integer.
-        int32lu: function(k) {
-            this.formats.push({
+        int32lu: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 4, {
+                    unpack: function(binary, struct) {
+                        struct[k] = unpack32l(binary);
+                    },
+
+                    pack: function(struct, binary) {
+                        pack32l(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 4 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = unsign32(unpack32l(binary));
+                    struct[k] = buf;
+                    for(var i = n - 1; i >= 0; --i) {
+                        buf[i] = unpack32l(binary);
+                    }
                 },
 
                 pack: function(struct, binary) {
-                    pack32l(struct[k], binary);
+                    for(var i = n - 1; i >= 0; --i) {
+                        pack32l(struct[k][i] || 0, binary);
+                    }
                 }
             });
-            this.size += 4;
-            return this;
+        },
+
+        // 32-bit signed big-endian integer.
+        int32bs: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 4, {
+                    unpack: function(binary, struct) {
+                        struct[k] = sign32(unpack32b(binary));
+                    },
+
+                    pack: function(struct, binary) {
+                        pack32b(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 4 * n, {
+                unpack: function(binary, struct) {
+                    struct[k] = buf;
+                    for(var i = 0; i < n; ++i) {
+                        buf[i] = sign32(unpack32b(binary));
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = 0; i < n; ++i) {
+                        pack32b(struct[k][i] || 0, binary);
+                    }
+                }
+            });
         },
 
         // 32-bit unsigned big-endian integer.
-        int32bu: function(k) {
-            this.formats.push({
+        int32bu: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 4, {
+                    unpack: function(binary, struct) {
+                        struct[k] = unpack32b(binary);
+                    },
+
+                    pack: function(struct, binary) {
+                        pack32b(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 4 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = unsign32(unpack32b(binary));
+                    struct[k] = buf;
+                    for(var i = 0; i < n; ++i) {
+                        buf[i] = unpack32b(binary);
+                    }
                 },
 
                 pack: function(struct, binary) {
-                    pack32b(struct[k], binary);
+                    for(var i = 0; i < n; ++i) {
+                        pack32b(struct[k][i] || 0, binary);
+                    }
                 }
             });
-            this.size += 4;
-            return this;
         },
 
-        // 32-bit little-endian float.
-        float32l: function(k) {
-            this.formats.push({
+        // 40-bit signed little-endian integer.
+        int40ls: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 5, {
+                    unpack: function(binary, struct) {
+                        struct[k] = sign40(unpack40l(binary));
+                    },
+
+                    pack: function(struct, binary) {
+                        pack40l(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 5 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = (new Float32Array(new Uint8Array([
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary)
-                    ]).buffer))[0];
+                    struct[k] = buf;
+                    for(var i = n - 1; i >= 0; --i) {
+                        buf[i] = sign40(unpack40l(binary));
+                    }
                 },
 
                 pack: function(struct, binary) {
-                    pack32l(new Uint32Array(new Float32Array([struct[k]]).buffer)[0], binary);
+                    for(var i = n - 1; i >= 0; --i) {
+                        pack40l(struct[k][i] || 0, binary);
+                    }
                 }
             });
-            this.size += 4;
-            return this;
         },
 
-        // 32-bit big-endian float.
-        float32b: function(k) {
-            this.formats.push({
+        // 40-bit unsigned little-endian integer.
+        int40lu: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 5, {
+                    unpack: function(binary, struct) {
+                        struct[k] = unpack40l(binary);
+                    },
+
+                    pack: function(struct, binary) {
+                        pack40l(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 5 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = (new Float32Array(new Uint8Array([
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary)
-                    ].reverse()).buffer))[0];
+                    struct[k] = buf;
+                    for(var i = n - 1; i >= 0; --i) {
+                        buf[i] = unpack40l(binary);
+                    }
                 },
 
                 pack: function(struct, binary) {
-                    pack32b(new Uint32Array(new Float32Array([struct[k]]).buffer)[0], binary);
+                    for(var i = n - 1; i >= 0; --i) {
+                        pack40l(struct[k][i] || 0, binary);
+                    }
                 }
             });
-            this.size += 4;
-            return this;
         },
 
-        // 64-bit little-endian float.
-        float64l: function(k) {
-            this.formats.push({
+        // 40-bit signed big-endian integer.
+        int40bs: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 5, {
+                    unpack: function(binary, struct) {
+                        struct[k] = sign40(unpack40b(binary));
+                    },
+
+                    pack: function(struct, binary) {
+                        pack40b(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 5 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = (new Float64Array(new Uint8Array([
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary)
-                    ]).buffer))[0];
+                    struct[k] = buf;
+                    for(var i = 0; i < n; ++i) {
+                        buf[i] = sign40(unpack40b(binary));
+                    }
                 },
 
                 pack: function(struct, binary) {
-                    var arr = new Uint8Array(new Float64Array([struct[k]]).buffer);
-                    pack8(arr[0], binary);
-                    pack8(arr[1], binary);
-                    pack8(arr[2], binary);
-                    pack8(arr[3], binary);
-                    pack8(arr[4], binary);
-                    pack8(arr[5], binary);
-                    pack8(arr[6], binary);
-                    pack8(arr[7], binary);
+                    for(var i = 0; i < n; ++i) {
+                        pack40b(struct[k][i] || 0, binary);
+                    }
                 }
             });
-            this.size += 8;
-            return this;
         },
 
-        // 64-bit big-endian float.
-        float64b: function(k) {
-            this.formats.push({
+        // 40-bit unsigned big-endian integer.
+        int40bu: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 5, {
+                    unpack: function(binary, struct) {
+                        struct[k] = unpack40b(binary);
+                    },
+
+                    pack: function(struct, binary) {
+                        pack40b(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 5 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = (new Float64Array(new Uint8Array([
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary),
-                        unpack8(binary)
-                    ].reverse()).buffer))[0];
+                    struct[k] = buf;
+                    for(var i = 0; i < n; ++i) {
+                        buf[i] = unpack40b(binary);
+                    }
                 },
 
                 pack: function(struct, binary) {
-                    var arr = new Uint8Array(new Float64Array([struct[k]]).buffer);
-                    pack8(arr[7], binary);
-                    pack8(arr[6], binary);
-                    pack8(arr[5], binary);
-                    pack8(arr[4], binary);
-                    pack8(arr[3], binary);
-                    pack8(arr[2], binary);
-                    pack8(arr[1], binary);
-                    pack8(arr[0], binary);
+                    for(var i = 0; i < n; ++i) {
+                        pack40b(struct[k][i] || 0, binary);
+                    }
                 }
             });
-            this.size += 8;
-            return this;
         },
 
-        // Fixed-length string.
+        // 48-bit signed little-endian integer.
+        int48ls: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 6, {
+                    unpack: function(binary, struct) {
+                        struct[k] = sign48(unpack48l(binary));
+                    },
+
+                    pack: function(struct, binary) {
+                        pack48l(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 6 * n, {
+                unpack: function(binary, struct) {
+                    struct[k] = buf;
+                    for(var i = n - 1; i >= 0; --i) {
+                        buf[i] = sign48(unpack48l(binary));
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = n - 1; i >= 0; --i) {
+                        pack48l(struct[k][i] || 0, binary);
+                    }
+                }
+            });
+        },
+
+        // 48-bit unsigned little-endian integer.
+        int48lu: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 6, {
+                    unpack: function(binary, struct) {
+                        struct[k] = unpack48l(binary);
+                    },
+
+                    pack: function(struct, binary) {
+                        pack48l(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 6 * n, {
+                unpack: function(binary, struct) {
+                    struct[k] = buf;
+                    for(var i = n - 1; i >= 0; --i) {
+                        buf[i] = unpack48l(binary);
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = n - 1; i >= 0; --i) {
+                        pack48l(struct[k][i] || 0, binary);
+                    }
+                }
+            });
+        },
+
+        // 48-bit signed big-endian integer.
+        int48bs: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 6, {
+                    unpack: function(binary, struct) {
+                        struct[k] = sign48(unpack48b(binary));
+                    },
+
+                    pack: function(struct, binary) {
+                        pack48b(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 6 * n, {
+                unpack: function(binary, struct) {
+                    struct[k] = buf;
+                    for(var i = 0; i < n; ++i) {
+                        buf[i] = sign48(unpack48b(binary));
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = 0; i < n; ++i) {
+                        pack48b(struct[k][i] || 0, binary);
+                    }
+                }
+            });
+        },
+
+        // 48-bit unsigned big-endian integer.
+        int48bu: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 6, {
+                    unpack: function(binary, struct) {
+                        struct[k] = unpack48b(binary);
+                    },
+
+                    pack: function(struct, binary) {
+                        pack48b(struct[k], binary);
+                    }
+                });
+            }
+
+            if(typeof buf === "undefined") buf = [];
+
+            return new Restruct(this, 6 * n, {
+                unpack: function(binary, struct) {
+                    struct[k] = buf;
+                    for(var i = 0; i < n; ++i) {
+                        buf[i] = unpack48b(binary);
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = 0; i < n; ++i) {
+                        pack48b(struct[k][i] || 0, binary);
+                    }
+                }
+            });
+        },
+
+        // UTF-8 string.
         string: function(k, n) {
-            this.formats.push({
+            return new Restruct(this, n, {
                 unpack: function(binary, struct) {
                     var bytes = [];
                     var eos = false;
@@ -401,37 +1035,6 @@
                     }
                 }
             });
-            this.size += n;
-            return this;
-        },
-
-        // Fixed-length bytes.
-        bytes: function(k, n) {
-            this.formats.push({
-                unpack: function(binary, struct) {
-                    var bytes = [];
-
-                    for(var i = 0; i < n; ++i) {
-                        bytes.push(unpack8(binary));
-                    }
-
-                    struct[k] = bytes;
-                },
-
-                pack: function(struct, binary) {
-                    var len = Math.min(struct[k].length, n);
-
-                    for(var i = 0; i < len; ++i) {
-                        pack8(struct[k][i], binary);
-                    }
-
-                    for(; len < n; ++len) {
-                        pack8(0, binary);
-                    }
-                }
-            });
-            this.size += n;
-            return this;
         },
 
         // Unpack an array to a struct.
@@ -467,11 +1070,12 @@
         }
     };
 
+    var restruct = new Restruct();
+
     if(typeof module !== "undefined" && module.exports) {
-        module.exports = Restruct;
+        module.exports = restruct;
     }
     if(typeof window !== "undefined") {
-        window.Restruct = Restruct;
+        window.restruct = restruct;
     }
 })();
-
