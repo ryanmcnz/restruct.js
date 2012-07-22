@@ -98,6 +98,7 @@
     // Restruct class.
     var Restruct = function() {
         this.formats = [];
+        this.size = 0;
     };
 
     Restruct.prototype = {
@@ -112,6 +113,7 @@
                     pack8(0, binary);
                 }
             });
+            this.size += 1;
             return this;
         },
 
@@ -126,6 +128,7 @@
                     pack8(struct[k].charCodeAt(0), binary);
                 }
             });
+            this.size += 1;
             return this;
         },
 
@@ -140,6 +143,7 @@
                     pack8(struct[k], binary);
                 }
             });
+            this.size += 1;
             return this;
         },
 
@@ -154,6 +158,7 @@
                     pack8(struct[k], binary);
                 }
             });
+            this.size += 1;
             return this;
         },
 
@@ -168,6 +173,7 @@
                     pack16l(struct[k], binary);
                 }
             });
+            this.size += 2;
             return this;
         },
 
@@ -182,6 +188,7 @@
                     pack16b(struct[k], binary);
                 }
             });
+            this.size += 2;
             return this;
         },
 
@@ -196,6 +203,7 @@
                     pack16l(struct[k], binary);
                 }
             });
+            this.size += 2;
             return this;
         },
 
@@ -210,6 +218,7 @@
                     pack16b(struct[k], binary);
                 }
             });
+            this.size += 2;
             return this;
         },
 
@@ -224,6 +233,7 @@
                     pack32l(struct[k], binary);
                 }
             });
+            this.size += 4;
             return this;
         },
 
@@ -238,6 +248,7 @@
                     pack32b(struct[k], binary);
                 }
             });
+            this.size += 4;
             return this;
         },
 
@@ -252,6 +263,7 @@
                     pack32l(struct[k], binary);
                 }
             });
+            this.size += 4;
             return this;
         },
 
@@ -266,6 +278,7 @@
                     pack32b(struct[k], binary);
                 }
             });
+            this.size += 4;
             return this;
         },
 
@@ -299,6 +312,7 @@
                     }
                 }
             });
+            this.size += n;
             return this;
         },
 

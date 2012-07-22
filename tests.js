@@ -190,8 +190,9 @@
 
         // composition
         testComposedPack: function(test) {
-            test.expect(1);
+            test.expect(2);
             var struct = (new Restruct).string('a', 10).int8s('b');
+            test.strictEqual(struct.size, 11);
             test.deepEqual(struct.pack({a: "hello", b: -1}, []), [104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 255]);
             test.done();
         },
