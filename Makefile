@@ -12,7 +12,7 @@ index.html: README.md
 clean:
 	rm -f index.html restruct.js tests.js
 
-tests: tests.js
+tests: restruct.js tests.js
 	node_modules/.bin/nodeunit tests.js
 
 .PHONY: all clean tests

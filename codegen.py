@@ -22,6 +22,29 @@ f.write(mako.template.Template("""(function() {
         return unescape(encodeURIComponent(s));
     };
 
+    // Boolean routines.
+    var unpackBoolean = function(binary) {
+        var x = unpack8(binary);
+        return [!!(x & 1), !!(x & 2), !!(x & 4), !!(x & 8),
+                !!(x & 16), !!(x & 32), !!(x & 64), !!(x & 128)];
+    };
+
+    var packBoolean = function(val, binary) {
+        pack8(val[0] | (val[1] << 1) | (val[2] << 2) | (val[3] << 3) |
+              (val[4] << 4) | (val[5] << 5) | (val[6] << 6) | (val[7] << 7),
+              binary);
+    };
+
+    // Nibble routines.
+    var unpackNibble = function(binary) {
+        var x = unpack8(binary);
+        return [x >> 4, x & 0x0f];
+    };
+
+    var packNibble = function(val, binary) {
+        pack8(val[0] << 4 | val[1], binary);
+    };
+
     % for bits in BITS:
     // ${bits}-bit routines.
     var sign${bits} = function(i) {
@@ -114,6 +137,66 @@ f.write(mako.template.Template("""(function() {
                 pack: function(struct, binary) {
                     for(var i = 0; i < n; ++i) {
                         pack8(0, binary);
+                    }
+                }
+            });
+        },
+
+        // Booleans.
+        boolean: function(k, n) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 1, {
+                    unpack: function(binary, struct) {
+                        struct[k] = unpackBoolean(binary);
+                    },
+
+                    pack: function(struct, binary) {
+                        packBoolean(struct[k], binary);
+                    }
+                });
+            }
+
+            return new Restruct(this, ${bits // 8} * n, {
+                unpack: function(binary, struct) {
+                    struct[k] = [];
+                    for(var i = 0; i < n; ++i) {
+                        struct[k][i] = unpackBoolean(binary);
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = 0; i < n; ++i) {
+                        packBoolean(struct[k][i], binary);
+                    }
+                }
+            });
+        },
+
+        // Nibbles.
+        nibble: function(k, n) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 1, {
+                    unpack: function(binary, struct) {
+                        struct[k] = unpackNibble(binary);
+                    },
+
+                    pack: function(struct, binary) {
+                        packNibble(struct[k], binary);
+                    }
+                });
+            }
+
+            return new Restruct(this, ${bits // 8} * n, {
+                unpack: function(binary, struct) {
+                    struct[k] = [];
+                    for(var i = 0; i < n; ++i) {
+                        struct[k][i] = unpackNibble(binary);
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = 0; i < n; ++i) {
+                        packNibble(struct[k][i], binary);
                     }
                 }
             });

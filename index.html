@@ -150,6 +150,20 @@
     
         <li>
         
+            <a href="#boolean">boolean</a>
+        
+        
+        </li>
+    
+        <li>
+        
+            <a href="#nibble">nibble</a>
+        
+        
+        </li>
+    
+        <li>
+        
             <a href="#int81624324048lbsu">int{8,16,24,32,40,48}{l,b}{s,u}</a>
         
         
@@ -282,6 +296,20 @@ struct.pack({...}, arr);
 <h3 id="pad">pad</h3>
 
 <p>A <code>pad</code> is the null byte, used for empty fields of a struct.</p>
+
+<h3 id="boolean">boolean</h3>
+
+<p>A <code>boolean</code> unpacks a 8-bit field into an array of eight boolean values, in
+order of least significant bit to most significant bit, e.g. <code>37</code> unpacks to:</p>
+
+<pre><code>[true, false, true, false, false, true, false, false]
+ 1     2      4     8      16     32    64     128
+</code></pre>
+
+<h3 id="nibble">nibble</h3>
+
+<p>A <code>nibble</code> unpacks a 8-bit field into an array of low and high nibbles. The
+array is ordered <code>[0xL, 0xH]</code>.</p>
 
 <h3 id="int81624324048lbsu">int{8,16,24,32,40,48}{l,b}{s,u}</h3>
 

@@ -1,5 +1,104 @@
 (function() {
     var tests = {
+        // pad
+        testUnpackPad: function(test) {
+            test.expect(1);
+            var struct = restruct.pad(2);
+            test.deepEqual(struct.unpack([0, 0]), {});
+            test.done();
+        },
+
+        testUnpackOnePad: function(test) {
+            test.expect(1);
+            var struct = restruct.pad();
+            test.deepEqual(struct.unpack([0]), {});
+            test.done();
+        },
+
+        testPackPad: function(test) {
+            test.expect(1);
+            var struct = restruct.pad(2);
+            test.deepEqual(struct.pack({}), [0, 0]);
+            test.done();
+        },
+
+        testPackOnePad: function(test) {
+            test.expect(1);
+            var struct = restruct.pad();
+            test.deepEqual(struct.pack({}), [0]);
+            test.done();
+        },
+
+        // boolean
+        testUnpackBoolean: function(test) {
+            test.expect(1);
+            var struct = restruct.boolean('test', 2);
+            test.deepEqual(struct.unpack([37, 24]), {test: [
+                [true, false, true, false, false, true, false, false],
+                [false, false, false, true, true, false, false, false]
+            ]});
+            test.done();
+        },
+
+        testUnpackOneBoolean: function(test) {
+            test.expect(1);
+            var struct = restruct.boolean('test');
+            test.deepEqual(struct.unpack([37]), {test: [true, false, true, false, false, true, false, false]});
+            test.done();
+        },
+
+        testPackBoolean: function(test) {
+            test.expect(1);
+            var struct = restruct.boolean('test', 2);
+            test.deepEqual(struct.pack({test: [
+                [true, false, true, false, false, true, false, false],
+                [false, false, false, true, true, false, false, false]
+            ]}), [37, 24]);
+            test.done();
+        },
+
+        testPackOneBoolean: function(test) {
+            test.expect(1);
+            var struct = restruct.boolean('test');
+            test.deepEqual(struct.pack({test: [true, false, true, false, false, true, false, false]}), [37]);
+            test.done();
+        },
+
+        // nibble
+        testUnpackNibble: function(test) {
+            test.expect(1);
+            var struct = restruct.nibble('test', 2);
+            test.deepEqual(struct.unpack([0x37, 0x24]), {test: [
+                [0x3, 0x7],
+                [0x2, 0x4]
+            ]});
+            test.done();
+        },
+
+        testUnpackOneNibble: function(test) {
+            test.expect(1);
+            var struct = restruct.nibble('test');
+            test.deepEqual(struct.unpack([0x37]), {test: [0x3, 0x7]});
+            test.done();
+        },
+
+        testPackNibble: function(test) {
+            test.expect(1);
+            var struct = restruct.nibble('test', 2);
+            test.deepEqual(struct.pack({test: [
+                [0x3, 0x7],
+                [0x2, 0x4]
+            ]}), [0x37, 0x24]);
+            test.done();
+        },
+
+        testPackOneNibble: function(test) {
+            test.expect(1);
+            var struct = restruct.nibble('test');
+            test.deepEqual(struct.pack({test: [0x3, 0x7]}), [0x37]);
+            test.done();
+        },
+
         // int8
         testUnpackInt8ls: function(test) {
             test.expect(1);

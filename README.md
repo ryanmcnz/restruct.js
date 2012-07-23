@@ -97,6 +97,19 @@ The size of the structure can be obtained via `struct.size`, e.g.:
 
 A `pad` is the null byte, used for empty fields of a struct.
 
+### boolean
+
+A `boolean` unpacks a 8-bit field into an array of eight boolean values, in
+order of least significant bit to most significant bit, e.g. `37` unpacks to:
+
+    [true, false, true, false, false, true, false, false]
+     1     2      4     8      16     32    64     128
+
+### nibble
+
+A `nibble` unpacks a 8-bit field into an array of low and high nibbles. The
+array is ordered `[0xL, 0xH]`.
+
 ### int{8,16,24,32,40,48}{l,b}{s,u}
 
 These types specify various integer types. The number is indicative of the
