@@ -334,13 +334,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 1 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = n - 1; i >= 0; --i) {
-                        buf[i] = sign8(unpack8(binary));
+                        struct[k][i] = sign8(unpack8(binary));
                     }
                 },
 
@@ -366,13 +369,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 1 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = n - 1; i >= 0; --i) {
-                        buf[i] = unpack8(binary);
+                        struct[k][i] = unpack8(binary);
                     }
                 },
 
@@ -398,13 +404,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 1 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = 0; i < n; ++i) {
-                        buf[i] = sign8(unpack8(binary));
+                        struct[k][i] = sign8(unpack8(binary));
                     }
                 },
 
@@ -430,13 +439,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 1 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = 0; i < n; ++i) {
-                        buf[i] = unpack8(binary);
+                        struct[k][i] = unpack8(binary);
                     }
                 },
 
@@ -462,13 +474,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 2 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = n - 1; i >= 0; --i) {
-                        buf[i] = sign16(unpack16l(binary));
+                        struct[k][i] = sign16(unpack16l(binary));
                     }
                 },
 
@@ -494,13 +509,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 2 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = n - 1; i >= 0; --i) {
-                        buf[i] = unpack16l(binary);
+                        struct[k][i] = unpack16l(binary);
                     }
                 },
 
@@ -526,13 +544,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 2 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = 0; i < n; ++i) {
-                        buf[i] = sign16(unpack16b(binary));
+                        struct[k][i] = sign16(unpack16b(binary));
                     }
                 },
 
@@ -558,13 +579,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 2 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = 0; i < n; ++i) {
-                        buf[i] = unpack16b(binary);
+                        struct[k][i] = unpack16b(binary);
                     }
                 },
 
@@ -590,13 +614,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 3 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = n - 1; i >= 0; --i) {
-                        buf[i] = sign24(unpack24l(binary));
+                        struct[k][i] = sign24(unpack24l(binary));
                     }
                 },
 
@@ -622,13 +649,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 3 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = n - 1; i >= 0; --i) {
-                        buf[i] = unpack24l(binary);
+                        struct[k][i] = unpack24l(binary);
                     }
                 },
 
@@ -654,13 +684,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 3 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = 0; i < n; ++i) {
-                        buf[i] = sign24(unpack24b(binary));
+                        struct[k][i] = sign24(unpack24b(binary));
                     }
                 },
 
@@ -686,13 +719,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 3 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = 0; i < n; ++i) {
-                        buf[i] = unpack24b(binary);
+                        struct[k][i] = unpack24b(binary);
                     }
                 },
 
@@ -718,13 +754,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 4 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = n - 1; i >= 0; --i) {
-                        buf[i] = sign32(unpack32l(binary));
+                        struct[k][i] = sign32(unpack32l(binary));
                     }
                 },
 
@@ -750,13 +789,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 4 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = n - 1; i >= 0; --i) {
-                        buf[i] = unpack32l(binary);
+                        struct[k][i] = unpack32l(binary);
                     }
                 },
 
@@ -782,13 +824,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 4 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = 0; i < n; ++i) {
-                        buf[i] = sign32(unpack32b(binary));
+                        struct[k][i] = sign32(unpack32b(binary));
                     }
                 },
 
@@ -814,13 +859,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 4 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = 0; i < n; ++i) {
-                        buf[i] = unpack32b(binary);
+                        struct[k][i] = unpack32b(binary);
                     }
                 },
 
@@ -846,13 +894,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 5 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = n - 1; i >= 0; --i) {
-                        buf[i] = sign40(unpack40l(binary));
+                        struct[k][i] = sign40(unpack40l(binary));
                     }
                 },
 
@@ -878,13 +929,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 5 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = n - 1; i >= 0; --i) {
-                        buf[i] = unpack40l(binary);
+                        struct[k][i] = unpack40l(binary);
                     }
                 },
 
@@ -910,13 +964,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 5 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = 0; i < n; ++i) {
-                        buf[i] = sign40(unpack40b(binary));
+                        struct[k][i] = sign40(unpack40b(binary));
                     }
                 },
 
@@ -942,13 +999,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 5 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = 0; i < n; ++i) {
-                        buf[i] = unpack40b(binary);
+                        struct[k][i] = unpack40b(binary);
                     }
                 },
 
@@ -974,13 +1034,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 6 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = n - 1; i >= 0; --i) {
-                        buf[i] = sign48(unpack48l(binary));
+                        struct[k][i] = sign48(unpack48l(binary));
                     }
                 },
 
@@ -1006,13 +1069,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 6 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = n - 1; i >= 0; --i) {
-                        buf[i] = unpack48l(binary);
+                        struct[k][i] = unpack48l(binary);
                     }
                 },
 
@@ -1038,13 +1104,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 6 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = 0; i < n; ++i) {
-                        buf[i] = sign48(unpack48b(binary));
+                        struct[k][i] = sign48(unpack48b(binary));
                     }
                 },
 
@@ -1070,13 +1139,16 @@
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, 6 * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     for(var i = 0; i < n; ++i) {
-                        buf[i] = unpack48b(binary);
+                        struct[k][i] = unpack48b(binary);
                     }
                 },
 
@@ -1120,10 +1192,46 @@
             });
         },
 
+        // Another struct.
+        struct: function(k, s, n) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 1, {
+                    unpack: function(binary, struct) {
+                        struct[k] = s.unpack(binary.array, binary.offset);
+                        binary.offset += s.size;
+                    },
+
+                    pack: function(struct, binary) {
+                        s.pack(struct[k], binary.array, binary.offset);
+                        binary.offset += s.size;
+                    }
+                });
+            }
+
+            return new Restruct(this, n * s.size, {
+                unpack: function(binary, struct) {
+                    struct[k] = [];
+                    for(var i = 0; i < n; ++i) {
+                        struct[k][i] = s.unpack(binary.array, binary.offset);
+                        binary.offset += s.size;
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = 0; i < n; ++i) {
+                        s.pack(struct[k][i], binary.array, binary.offset);
+                        binary.offset += s.size;
+                    }
+                }
+            });
+        },
+
         // Unpack an array to a struct.
-        unpack: function(array) {
+        unpack: function(array, offset) {
+            if(typeof offset === 'undefined') offset = 0;
+
             var binary = {
-                offset: 0,
+                offset: offset,
                 array: array
             };
 
@@ -1137,11 +1245,12 @@
         },
 
         // Pack an array to a struct.
-        pack: function(struct, array) {
+        pack: function(struct, array, offset) {
+            if(typeof offset === 'undefined') offset = 0;
             if(typeof array === 'undefined') array = [];
 
             var binary = {
-                offset: 0,
+                offset: offset,
                 array: array
             };
 

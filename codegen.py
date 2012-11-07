@@ -223,20 +223,23 @@ f.write(mako.template.Template("""(function() {
                 });
             }
 
-            if(typeof buf === "undefined") buf = [];
-
             return new Restruct(this, ${bits // 8} * n, {
                 unpack: function(binary, struct) {
-                    struct[k] = buf;
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
                     % if endianness == "b":
                     for(var i = 0; i < n; ++i) {
                     % else:
                     for(var i = n - 1; i >= 0; --i) {
                     % endif
                         % if signedness == "s":
-                        buf[i] = sign${bits}(unpack${bits}${bits != 8 and endianness or ""}(binary));
+                        struct[k][i] = sign${bits}(unpack${bits}${bits != 8 and endianness or ""}(binary));
                         % else:
-                        buf[i] = unpack${bits}${bits != 8 and endianness or ""}(binary);
+                        struct[k][i] = unpack${bits}${bits != 8 and endianness or ""}(binary);
                         % endif
                     }
                 },
@@ -288,10 +291,46 @@ f.write(mako.template.Template("""(function() {
             });
         },
 
+        // Another struct.
+        struct: function(k, s, n) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 1, {
+                    unpack: function(binary, struct) {
+                        struct[k] = s.unpack(binary.array, binary.offset);
+                        binary.offset += s.size;
+                    },
+
+                    pack: function(struct, binary) {
+                        s.pack(struct[k], binary.array, binary.offset);
+                        binary.offset += s.size;
+                    }
+                });
+            }
+
+            return new Restruct(this, n * s.size, {
+                unpack: function(binary, struct) {
+                    struct[k] = [];
+                    for(var i = 0; i < n; ++i) {
+                        struct[k][i] = s.unpack(binary.array, binary.offset);
+                        binary.offset += s.size;
+                    }
+                },
+
+                pack: function(struct, binary) {
+                    for(var i = 0; i < n; ++i) {
+                        s.pack(struct[k][i], binary.array, binary.offset);
+                        binary.offset += s.size;
+                    }
+                }
+            });
+        },
+
         // Unpack an array to a struct.
-        unpack: function(array) {
+        unpack: function(array, offset) {
+            if(typeof offset === 'undefined') offset = 0;
+
             var binary = {
-                offset: 0,
+                offset: offset,
                 array: array
             };
 
@@ -305,11 +344,12 @@ f.write(mako.template.Template("""(function() {
         },
 
         // Pack an array to a struct.
-        pack: function(struct, array) {
+        pack: function(struct, array, offset) {
+            if(typeof offset === 'undefined') offset = 0;
             if(typeof array === 'undefined') array = [];
 
             var binary = {
-                offset: 0,
+                offset: offset,
                 array: array
             };
 

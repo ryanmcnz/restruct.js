@@ -198,6 +198,35 @@ f.write(mako.template.Template("""(function() {
 % endfor
 % endfor
 
+        // struct
+        testPackOneStruct: function(test) {
+            test.expect(1);
+            var struct = restruct.struct('test', restruct.string('test', 10));
+            test.deepEqual(struct.pack({test: {test: "hello\\u00ac"}}, []), [104, 101, 108, 108, 111, 194, 172, 0, 0, 0]);
+            test.done();
+        },
+
+        testPackStruct: function(test) {
+            test.expect(1);
+            var struct = restruct.struct('test', restruct.string('test', 10), 2);
+            test.deepEqual(struct.pack({test: [{test: "hello\\u00ac"}, {test: "hallo\\u00ac"}]}, []), [104, 101, 108, 108, 111, 194, 172, 0, 0, 0, 104, 97, 108, 108, 111, 194, 172, 0, 0, 0]);
+            test.done();
+        },
+
+        testUnpackOneStruct: function(test) {
+            test.expect(1);
+            var struct = restruct.struct('test', restruct.string('test', 10));
+            test.deepEqual(struct.unpack([104, 101, 108, 108, 111, 194, 172, 0, 0, 0]), {test: {test: "hello\\u00ac"}});
+            test.done();
+        },
+
+        testPackStruct: function(test) {
+            test.expect(1);
+            var struct = restruct.struct('test', restruct.string('test', 10), 2);
+            test.deepEqual(struct.unpack([104, 101, 108, 108, 111, 194, 172, 0, 0, 0, 104, 97, 108, 108, 111, 194, 172, 0, 0, 0]), {test: [{test: "hello\\u00ac"}, {test: "hallo\\u00ac"}]});
+            test.done();
+        },
+
         // string
         testPackString: function(test) {
             test.expect(1);

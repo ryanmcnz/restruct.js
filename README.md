@@ -125,3 +125,8 @@ affects the packing/unpacking of arrays.
 A `string` is a string of variable length. On packing, it will encode the
 string to UTF-8 and on unpacking will decode the string from UTF-8 (i.e.
 conversion of native JavaScript strings to/from byte sequences, respectively).
+
+### struct
+
+A `struct` is another `Restruct` instance. This enables structs to be packed
+inside of each other, as simple compositions or as arrays of structs.
