@@ -1,9 +1,9 @@
 {
     "name": "restruct",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "author": "Tony Young <tony@rfw.name>",
     "description": "A JavaScript binary data library.",
-    "main": "./struct",
+    "main": "./restruct.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/rfw/restruct.js.git"
