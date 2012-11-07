@@ -294,7 +294,7 @@ f.write(mako.template.Template("""(function() {
         // Another struct.
         struct: function(k, s, n) {
             if(typeof n === "undefined") {
-                return new Restruct(this, 1, {
+                return new Restruct(this, s.size, {
                     unpack: function(binary, struct) {
                         struct[k] = s.unpack(binary.array, binary.offset);
                         binary.offset += s.size;
