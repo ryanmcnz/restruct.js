@@ -156,7 +156,7 @@ f.write(mako.template.Template("""(function() {
                 });
             }
 
-            return new Restruct(this, ${bits // 8} * n, {
+            return new Restruct(this, n, {
                 unpack: function(binary, struct) {
                     struct[k] = [];
                     for(var i = 0; i < n; ++i) {
@@ -186,7 +186,7 @@ f.write(mako.template.Template("""(function() {
                 });
             }
 
-            return new Restruct(this, ${bits // 8} * n, {
+            return new Restruct(this, n, {
                 unpack: function(binary, struct) {
                     struct[k] = [];
                     for(var i = 0; i < n; ++i) {
