@@ -230,6 +230,73 @@
         binary.array[binary.offset++] = (val >> 8) & 0xff;
         binary.array[binary.offset++] = val & 0xff;
     };
+    
+	// Float Routines
+	//Float to int
+	function FloatToIEEE(f)
+	{
+		var buf = new ArrayBuffer(4);
+		(new Float32Array(buf))[0] = f;
+		return (new Uint32Array(buf))[0];
+	};
+
+	//int to float
+	function IEEEToFloat(i)
+	{
+		var buf = new ArrayBuffer(4);
+		(new Uint32Array(buf))[0] = i;
+		return (new Float32Array(buf))[0];
+	};
+
+	//Float to hex array
+	function FloatToHex(f)
+	{
+	  return FloatToIEEE(f).toString(16)
+		.toUpperCase().match(/../g).reverse();
+	};
+
+	//Hex string to float, eg 7F7FFFEE
+	function HexToFloat(h)
+	{
+	  return parseInt(h,16);
+	};
+
+	//Get array of each 8 bits in 32-bits of IEEEE
+	function IEEEToBits(i)
+	{
+	  return parseInt(i).toString(2);//.match(/..../g);//.reverse();
+	};
+
+	// Converts Hex Arary to Int Array
+	function HexArrayToIntArray(h)
+	{
+	  for(var ii = 0; ii < h.length; ii++)
+	  {
+		h[ii] = parseInt("0x"+h[ii]);
+	  }
+	  return h;
+	};
+
+	// Converts Int Array to Hex Array
+	function IntArrayToHexArray(ia)
+	{
+	  for(var ii = 0; ii < ia.length; ii++)
+	  {
+		ia[ii] = ia[ii].toString(16).toUpperCase();
+	  }
+	  return ia;
+	};
+	
+	//Convert int array back to float
+	function intArrayToFloat(ia)
+	{
+	  ia = ia.reverse();
+	  ia = IntArrayToHexArray(ia);
+	  ia = ia.join("");
+	  ia = HexToFloat(ia);
+	  return IEEEToFloat(ia);	  
+	}
+	// End of Float routines
 
     // Restruct class.
     var Restruct = function(parent, size, format) {
@@ -269,12 +336,13 @@
                     },
 
                     pack: function(struct, binary) {
+						if (typeof struct[k] === "undefined") struct[k]={};
                         packBoolean(struct[k], binary);
                     }
                 });
             }
 
-            return new Restruct(this, n, {
+            return new Restruct(this, 6 * n, {
                 unpack: function(binary, struct) {
                     struct[k] = [];
                     for(var i = 0; i < n; ++i) {
@@ -283,7 +351,9 @@
                 },
 
                 pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = 0; i < n; ++i) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         packBoolean(struct[k][i], binary);
                     }
                 }
@@ -299,12 +369,13 @@
                     },
 
                     pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};
                         packNibble(struct[k], binary);
                     }
                 });
             }
 
-            return new Restruct(this, n, {
+            return new Restruct(this, 6 * n, {
                 unpack: function(binary, struct) {
                     struct[k] = [];
                     for(var i = 0; i < n; ++i) {
@@ -313,7 +384,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = 0; i < n; ++i) {
+						if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         packNibble(struct[k][i], binary);
                     }
                 }
@@ -329,6 +402,7 @@
                     },
 
                     pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};
                         pack8(struct[k], binary);
                     }
                 });
@@ -348,7 +422,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = n - 1; i >= 0; --i) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack8(struct[k][i] || 0, binary);
                     }
                 }
@@ -364,6 +440,7 @@
                     },
 
                     pack: function(struct, binary) {
+						if (typeof struct[k] === "undefined") struct[k]={};
                         pack8(struct[k], binary);
                     }
                 });
@@ -383,7 +460,9 @@
                 },
 
                 pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = n - 1; i >= 0; --i) {
+						if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack8(struct[k][i] || 0, binary);
                     }
                 }
@@ -399,6 +478,7 @@
                     },
 
                     pack: function(struct, binary) {
+						if (typeof struct[k] === "undefined") struct[k]={};
                         pack8(struct[k], binary);
                     }
                 });
@@ -418,7 +498,9 @@
                 },
 
                 pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = 0; i < n; ++i) {
+						if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack8(struct[k][i] || 0, binary);
                     }
                 }
@@ -434,6 +516,7 @@
                     },
 
                     pack: function(struct, binary) {
+						if (typeof struct[k] === "undefined") struct[k]={};
                         pack8(struct[k], binary);
                     }
                 });
@@ -453,7 +536,9 @@
                 },
 
                 pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = 0; i < n; ++i) {
+						if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack8(struct[k][i] || 0, binary);
                     }
                 }
@@ -469,6 +554,7 @@
                     },
 
                     pack: function(struct, binary) {
+						if (typeof struct[k] === "undefined") struct[k]={};
                         pack16l(struct[k], binary);
                     }
                 });
@@ -488,7 +574,9 @@
                 },
 
                 pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = n - 1; i >= 0; --i) {
+						if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack16l(struct[k][i] || 0, binary);
                     }
                 }
@@ -504,6 +592,7 @@
                     },
 
                     pack: function(struct, binary) {
+						if (typeof struct[k] === "undefined") struct[k]={};
                         pack16l(struct[k], binary);
                     }
                 });
@@ -523,7 +612,9 @@
                 },
 
                 pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = n - 1; i >= 0; --i) {
+						if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack16l(struct[k][i] || 0, binary);
                     }
                 }
@@ -539,6 +630,7 @@
                     },
 
                     pack: function(struct, binary) {
+						if (typeof struct[k] === "undefined") struct[k]={};
                         pack16b(struct[k], binary);
                     }
                 });
@@ -558,7 +650,9 @@
                 },
 
                 pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = 0; i < n; ++i) {
+						if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack16b(struct[k][i] || 0, binary);
                     }
                 }
@@ -574,6 +668,7 @@
                     },
 
                     pack: function(struct, binary) {
+						if (typeof struct[k] === "undefined") struct[k]={};
                         pack16b(struct[k], binary);
                     }
                 });
@@ -593,7 +688,9 @@
                 },
 
                 pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = 0; i < n; ++i) {
+						if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack16b(struct[k][i] || 0, binary);
                     }
                 }
@@ -609,6 +706,7 @@
                     },
 
                     pack: function(struct, binary) {
+						if (typeof struct[k] === "undefined") struct[k]={};
                         pack24l(struct[k], binary);
                     }
                 });
@@ -628,7 +726,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = n - 1; i >= 0; --i) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack24l(struct[k][i] || 0, binary);
                     }
                 }
@@ -644,6 +744,7 @@
                     },
 
                     pack: function(struct, binary) {
+						if (typeof struct[k] === "undefined") struct[k]={};
                         pack24l(struct[k], binary);
                     }
                 });
@@ -663,7 +764,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = n - 1; i >= 0; --i) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack24l(struct[k][i] || 0, binary);
                     }
                 }
@@ -679,6 +782,7 @@
                     },
 
                     pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};
                         pack24b(struct[k], binary);
                     }
                 });
@@ -698,7 +802,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = 0; i < n; ++i) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack24b(struct[k][i] || 0, binary);
                     }
                 }
@@ -714,6 +820,7 @@
                     },
 
                     pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};
                         pack24b(struct[k], binary);
                     }
                 });
@@ -733,7 +840,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = 0; i < n; ++i) {
+					if(typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack24b(struct[k][i] || 0, binary);
                     }
                 }
@@ -749,6 +858,7 @@
                     },
 
                     pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};
                         pack32l(struct[k], binary);
                     }
                 });
@@ -768,7 +878,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = n - 1; i >= 0; --i) {
+					if(typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack32l(struct[k][i] || 0, binary);
                     }
                 }
@@ -784,6 +896,7 @@
                     },
 
                     pack: function(struct, binary) {
+						if (typeof struct[k] === "undefined") struct[k]={};
                         pack32l(struct[k], binary);
                     }
                 });
@@ -803,7 +916,9 @@
                 },
 
                 pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};				
                     for(var i = n - 1; i >= 0; --i) {
+						if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack32l(struct[k][i] || 0, binary);
                     }
                 }
@@ -819,6 +934,7 @@
                     },
 
                     pack: function(struct, binary) {
+						if (typeof struct[k] === "undefined") struct[k]={};
                         pack32b(struct[k], binary);
                     }
                 });
@@ -838,7 +954,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k] === "undefined") struct[k]={};
                     for(var i = 0; i < n; ++i) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack32b(struct[k][i] || 0, binary);
                     }
                 }
@@ -854,6 +972,7 @@
                     },
 
                     pack: function(struct, binary) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack32b(struct[k], binary);
                     }
                 });
@@ -873,7 +992,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k][i] === "undefined") struct[k][i]={};
                     for(var i = 0; i < n; ++i) {
+					if(typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack32b(struct[k][i] || 0, binary);
                     }
                 }
@@ -889,6 +1010,7 @@
                     },
 
                     pack: function(struct, binary) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack40l(struct[k], binary);
                     }
                 });
@@ -908,7 +1030,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k][i] === "undefined") struct[k][i]={};
                     for(var i = n - 1; i >= 0; --i) {
+					if(typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack40l(struct[k][i] || 0, binary);
                     }
                 }
@@ -924,6 +1048,7 @@
                     },
 
                     pack: function(struct, binary) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack40l(struct[k], binary);
                     }
                 });
@@ -943,7 +1068,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k][i] === "undefined") struct[k][i]={};
                     for(var i = n - 1; i >= 0; --i) {
+					if(typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack40l(struct[k][i] || 0, binary);
                     }
                 }
@@ -959,6 +1086,7 @@
                     },
 
                     pack: function(struct, binary) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack40b(struct[k], binary);
                     }
                 });
@@ -978,7 +1106,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k][i] === "undefined") struct[k][i]={};
                     for(var i = 0; i < n; ++i) {
+					if(typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack40b(struct[k][i] || 0, binary);
                     }
                 }
@@ -994,6 +1124,7 @@
                     },
 
                     pack: function(struct, binary) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack40b(struct[k], binary);
                     }
                 });
@@ -1013,7 +1144,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k][i] === "undefined") struct[k][i]={};
                     for(var i = 0; i < n; ++i) {
+					if(typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack40b(struct[k][i] || 0, binary);
                     }
                 }
@@ -1029,6 +1162,7 @@
                     },
 
                     pack: function(struct, binary) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack48l(struct[k], binary);
                     }
                 });
@@ -1048,7 +1182,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k][i] === "undefined") struct[k][i]={};
                     for(var i = n - 1; i >= 0; --i) {
+					if(typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack48l(struct[k][i] || 0, binary);
                     }
                 }
@@ -1064,6 +1200,7 @@
                     },
 
                     pack: function(struct, binary) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack48l(struct[k], binary);
                     }
                 });
@@ -1083,7 +1220,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k][i] === "undefined") struct[k][i]={};
                     for(var i = n - 1; i >= 0; --i) {
+					if(typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack48l(struct[k][i] || 0, binary);
                     }
                 }
@@ -1099,6 +1238,7 @@
                     },
 
                     pack: function(struct, binary) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack48b(struct[k], binary);
                     }
                 });
@@ -1118,7 +1258,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k][i] === "undefined") struct[k][i]={};
                     for(var i = 0; i < n; ++i) {
+					if(typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack48b(struct[k][i] || 0, binary);
                     }
                 }
@@ -1134,6 +1276,7 @@
                     },
 
                     pack: function(struct, binary) {
+					if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack48b(struct[k], binary);
                     }
                 });
@@ -1153,7 +1296,9 @@
                 },
 
                 pack: function(struct, binary) {
+				if (typeof struct[k][i] === "undefined") struct[k][i]={};
                     for(var i = 0; i < n; ++i) {
+					if(typeof struct[k][i] === "undefined") struct[k][i]={};
                         pack48b(struct[k][i] || 0, binary);
                     }
                 }
@@ -1177,7 +1322,8 @@
                     struct[k] = decodeUTF8(String.fromCharCode.apply(String, bytes));
                 },
 
-                pack: function(struct, binary) {
+                pack: function(struct, binary) {					
+				    if (typeof struct[k] === "undefined") struct[k]='';
                     var str = encodeUTF8(struct[k]);
                     var len = Math.min(str.length, n);
 
@@ -1194,14 +1340,16 @@
 
         // Another struct.
         struct: function(k, s, n) {
-            if(typeof n === "undefined") {
-                return new Restruct(this, s.size, {
+            if(typeof n === "undefined") {				
+                //return new Restruct(this, 1, { <-- This was reporting wrong sizes for struct-in-struct!
+				return new Restruct(this, s.size, {
                     unpack: function(binary, struct) {
                         struct[k] = s.unpack(binary.array, binary.offset);
                         binary.offset += s.size;
                     },
 
                     pack: function(struct, binary) {
+						if (typeof struct[k] === "undefined") struct[k]={};
                         s.pack(struct[k], binary.array, binary.offset);
                         binary.offset += s.size;
                     }
@@ -1218,17 +1366,78 @@
                 },
 
                 pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};									
                     for(var i = 0; i < n; ++i) {
+						if (typeof struct[k][i] === "undefined") struct[k][i]={};
                         s.pack(struct[k][i], binary.array, binary.offset);
                         binary.offset += s.size;
                     }
                 }
             });
         },
+		
+		// Floats
+        // 32-bit signed little-endian float.
+        float32l: function(k, n, buf) {
+            if(typeof n === "undefined") {
+                return new Restruct(this, 4, {
+                    unpack: function(binary, struct) {                         
+						
+						var buf = new ArrayBuffer(4);
+						(new Uint32Array(buf))[0] = unpack32l(binary);
+						var res = (new Float32Array(buf))[0];
+						
+						struct[k] = res;				
+                    },
+
+                    pack: function(struct, binary) {
+					if (typeof struct[k] === "undefined") struct[k]={};                        
+
+						var buf = new ArrayBuffer(4);
+						(new Float32Array(buf))[0] = struct[k];
+						var res = (new Uint32Array(buf))[0];
+						
+						pack32l(res+1, binary);
+				}
+                });
+            }
+
+            return new Restruct(this, 4 * n, {
+                unpack: function(binary, struct) {
+                    if(typeof buf !== "undefined") {
+                        struct[k] = buf;
+                    } else {
+                        struct[k] = [];
+                    }
+
+                    for(var i = n - 1; i >= 0; --i) {
+                        
+						var buf = new ArrayBuffer(4);
+						(new Uint32Array(buf))[0] = unpack32l(binary);
+						var res = (new Float32Array(buf))[0];
+						
+						struct[k][i] = res;
+                    }
+                },
+
+                pack: function(struct, binary) {
+				if (typeof struct[k] === "undefined") struct[k]={};
+                    for(var i = n - 1; i >= 0; --i) {
+					if(typeof struct[k][i] === "undefined") struct[k][i]={};                        
+						var buf = new ArrayBuffer(4);
+						(new Float32Array(buf))[0] = struct[k];
+						var res = (new Uint32Array(buf))[0];
+						
+						pack32l(res, binary);
+                    }
+                }
+            });
+        },		
 
         // Unpack an array to a struct.
         unpack: function(array, offset) {
             if(typeof offset === 'undefined') offset = 0;
+			if(typeof array === 'undefined') array = [this.length];
 
             var binary = {
                 offset: offset,
@@ -1242,7 +1451,7 @@
             }
 
             return struct;
-        },
+        },		
 
         // Pack an array to a struct.
         pack: function(struct, array, offset) {
@@ -1254,7 +1463,7 @@
                 array: array
             };
 
-            for(var i = 0; i < this.formats.length; ++i) {
+            for(var i = 0; i < this.formats.length; ++i) {                
                 this.formats[i].pack(struct, binary);
             }
 
