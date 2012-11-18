@@ -84,6 +84,22 @@ an array to use for packing into. This can be a typed array:
     var arr = new Uint8Array(1);
     struct.pack({...}, arr);
 
+### Simple Packing
+
+The `struct.pack` function can also be used when only a few values have been defined.
+Any undefined values are simply filled with 0's (quite handy for debugging). For example:
+
+    testStruct = restruct.
+        int8lu("id").
+	    string("val1",13).
+	    string("val2",13);
+    
+    testStruct.pack({val1: "Kittens"});
+
+This would fill 'id' and 'val2' with 0's and populate 'val1' with "Kittens", resulting in:
+
+    [ 0, 75, 105, 116, 116, 101, 110, 115, 0, 0, 0, 0, 0 ]
+
 ## Size
 
 The size of the structure can be obtained via `struct.size`, e.g.:
@@ -125,6 +141,15 @@ affects the packing/unpacking of arrays.
 A `string` is a string of variable length. On packing, it will encode the
 string to UTF-8 and on unpacking will decode the string from UTF-8 (i.e.
 conversion of native JavaScript strings to/from byte sequences, respectively).
+
+### float32l
+
+A `float32l` is a 32-bit little endian float. On packing, it will encode the float to it's integer representation.
+On unpacking, it will decode the integer back to a float (without any precision checking).
+
+Note: Some floats may have a slight loss of precision when unpacked.
+This is due to the 'epsilon' limits, documented here:
+http://en.wikipedia.org/wiki/Machine_epsilon
 
 ### struct
 
